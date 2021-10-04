@@ -13,7 +13,7 @@ async function linkedInSearch(p_list, count, success, fail) { // filter by count
         "q=peopleSearchQuery&" +
         "start="+ String(count) +"&" +
         "count=100&" +
-        "query=(bingGeo:(includedValues:List((id:100876405)))," +
+        "query=(" +
                "doFetchHeroCard:false," +
                "recentSearchParam:(doLogHistory:true,id:1075889658)," +
                "spellCorrectionEnabled:true," +
@@ -122,7 +122,7 @@ async function linkedInSearch(p_list, count, success, fail) { // filter by count
     }
     count = i + 1;
   }
-  console.log("Processed", count + total, "/", cof_filter.paging.total, "LinkedIn profiles," +
+  console.log("Processed", success + fail, "/", cof_filter.paging.total, "LinkedIn profiles," +
               " success:", success, "failed:", fail);
   if (total + 100 > cof_filter.paging.total) {
     return p_list;
