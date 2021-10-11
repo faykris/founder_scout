@@ -13,7 +13,7 @@ async function linkedInSearch(p_list, count, success, fail) { // filter by count
         "q=peopleSearchQuery&" +
         "start="+ String(count) +"&" +
         "count=100&" +
-        "query=(" +
+        "query=(bingGeo:(includedValues:List((id:100876405)))" +
                "doFetchHeroCard:false," +
                "recentSearchParam:(doLogHistory:true,id:1075889658)," +
                "spellCorrectionEnabled:true," +
@@ -133,7 +133,7 @@ async function linkedInSearch(p_list, count, success, fail) { // filter by count
   }
 }
 
-const totalProfiles = await linkedInSearch(profileList,0 , 0 , 0);
+const totalProfiles = linkedInSearch(profileList,0 , 0 , 0);
 //console.log(totalProfiles);
 //console.log("Total records:", totalProfiles.length);
 

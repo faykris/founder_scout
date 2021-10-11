@@ -1,0 +1,41 @@
+###
+POST http://localhost:9000/api/co_founders HTTP/1.1
+Content-Type: application/json
+
+{
+  "profileInfo": {
+    "vmid": "ACwAADLUE7QB1j0GzI2FTPf4DYMsM_aSeN0tx6o",
+    "profileUrl": "https://www.linkedin.com/in/ACwAADLUE7QB1j0GzI2FTPf4DYMsM_aSeN0tx6o,NAME_SEARCH,Ou1F/",
+    "linkedInProfileUrl": "https://www.linkedin.com/in/ACwAADLUE7QB1j0GzI2FTPf4DYMsM_aSeN0tx6o/",
+    "firstName": "Timothy",
+    "lastName": "Wilde",
+    "fullName": "Timothy Wilde",
+    "title": "Co-Founder",
+    "location": "Hamburg, Hamburg, Germany",
+    "isPremium": true,
+    "profileImageUrl": "https://media-exp1.licdn.com/dms/image/C5603AQGeuq2oWkYOQg/profile-displayphoto-shrink_100_100/0/1602429114383?e=1639008000&v=beta&t=mN52I9GTPLyzCeal34LFITB-oimYpboYlRdyDr3InQ0"
+  },
+  "companyInfo": {
+    "companyName": "Wildmund Ventures GmbH",
+    "companyId": "69973820",
+    "companyUrl": "https://www.linkedin.com/company/69973820/",
+    "websiteUrl": "https://wilmund.com",
+    "industry": "Consumer Goods",
+    "location": {
+      "country": "Germany",
+      "city": "Hamburg"
+    },
+    "createdAt": {
+      "month": 11,
+      "year": 2020
+    },
+    "summary": "Ich bin E-Commerce Enthusiast, Freelancer und Gründer von Wildmund Ventures. Was mich und meine Arbeit auszeichnet, ist der absolute Wunsch anderen zu helfen erfolgreicher im Onlinehandel zu werden. \n\nDabei nehmen Geschwindigkeit, Transparenz und Ehrlichkeit die zentrale Rolle in meiner Unternehmung ein. Durch meine praxisnahe Ausbildung in den Bereichen Medienmanagement & E-Commerce sowie einschlägiger Erfahrung als Händler & Berater steht meine Firma wilde.digital führ eine unabhängige Beratung im E-Commerce – ohne jeglichen Selbstzweck!",
+    "timestamp": "2021-10-04T12:44:02.441Z"
+  }
+}
+
+###
+GET http://localhost:9000/api/co_founders HTTP/1.1
+
+###
+GET http://localhost:9000/api/co_founders/ACwAADLUE7QB1j0GzI2FTPf4DYMsM_aSeN0tx7o HTTP/1.1
