@@ -38,4 +38,4 @@ Content-Type: application/json
 GET http://localhost:9000/api/co_founders HTTP/1.1
 
 ###
-GET http://localhost:9000/api/co_founders/ACwAADLUE7QB1j0GzI2FTPf4DYMsM_aSeN0tx7o HTTP/1.1
+GET http://localhost:9000/api/co_founders/ACwAADLUE7QB1j0GzI2FTPf4DYMsM_aSeN0tx6o HTTP/1.1

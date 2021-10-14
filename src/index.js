@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the API")
 });
 
-mongoose  // pr
+mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.error(error));
