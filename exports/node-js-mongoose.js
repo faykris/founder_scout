@@ -9,31 +9,30 @@ function sleep(ms) {
 
 async function company_info(companyId) {
   const result = await fetch("https://www.linkedin.com/sales-api/salesApiCompanies/" +
-    companyId +
-    "?decoration=%28entityUrn%2Cname%2Caccount%28saved%2CnoteCount%2ClistCount%2CcrmStatus%29%2CpictureInfo%2CcompanyPictureDisplayImage%2Cdescription%2Cindustry%2CemployeeCount%2CemployeeDisplayCount%2CemployeeCountRange%2Clocation%2Cheadquarters%2Cwebsite%2Crevenue%2CformattedRevenue%2CemployeesSearchPageUrl%2CflagshipCompanyUrl%2Cemployees*~fs_salesProfile%28entityUrn%2CfirstName%2ClastName%2CfullName%2CpictureInfo%2CprofilePictureDisplayImage%29%29", {
+    companyId + "?" +
+    "decoration=%28entityUrn%2Cname%2Caccount%28saved%2CnoteCount%2ClistCount%2CcrmStatus%29%2CpictureInfo%2CcompanyPictureDisplayImage%2Cdescription%2Cindustry%2CemployeeCount%2CemployeeDisplayCount%2CemployeeCountRange%2Clocation%2Cheadquarters%2Cwebsite%2Crevenue%2CformattedRevenue%2CemployeesSearchPageUrl%2CflagshipCompanyUrl%2Cemployees*~fs_salesProfile%28entityUrn%2CfirstName%2ClastName%2CfullName%2CpictureInfo%2CprofilePictureDisplayImage%29%29", {
     "headers": {
       "accept": "*/*",
       "accept-language": "es-ES,es;q=0.9",
       "csrf-token": "ajax:3228420206501524135",
-      "sec-ch-ua": "'Chromium';v='94', 'Google Chrome';v='94', ';Not A Brand';v='99'",
+      "sec-ch-ua": "\"Chromium\";v=\"94\", \"Google Chrome\";v=\"94\", \";Not A Brand\";v=\"99\"",
       "sec-ch-ua-mobile": "?0",
-      "sec-ch-ua-platform": "'Windows'",
+      "sec-ch-ua-platform": "\"Windows\"",
       "sec-fetch-dest": "empty",
       "sec-fetch-mode": "cors",
       "sec-fetch-site": "same-origin",
       "x-li-identity": "dXJuOmxpOm1lbWJlcjo5Mzc3NDc3ODk",
       "x-li-lang": "en_US",
-      "x-li-page-instance": "urn:li:page:d_sales2_search_people_saved_all;U3z6yR4CRTmO8sST4NX/UQ==",
+      "x-li-page-instance": "urn:li:page:d_sales2_search_people_saved_all;zw0l9SOVRuijjGdq3vttyg==",
       "x-restli-protocol-version": "2.0.0",
-      "cookie": "li_sugr=f158f3ac-77e6-447e-b2af-9545fc5d9e06; bcookie='v=2&c9eb21a4-fc2f-4f29-8659-b41b16dd4ecf'; bscookie='v=1&20211001172434d70910a8-e1cc-49e9-8aa0-0ecff8027596AQFEM3tpoixToYXNm3jTfcXXrkcKWORt'; aam_uuid=40577756698522595741660832106329087972; g_state={'i_p':1633116282895,'i_l':1}; _gcl_au=1.1.685508982.1633109242; timezone=America/Bogota; _guid=0fcb2493-f4c3-46d2-9ca0-1ca73e9ccc95; __ssid=aadffd93-2af2-4702-a697-ec3571abb081; _ga=GA1.2.1481398525.1633109501; gpv_pn=www.linkedin.com%2Fpayments%2Fpurchase; dfpfpt=d88a4d9619c74e1a8a91bbb653ca0471; s_tslv=1633109815875; li_rm=AQENfHtB8yo-BQAAAXw8-eleeGwbNTt6zKYjMjYBqdE2ZSESsoHTQoBG2X1AlNE9SnFtJADOYuNtVjJlnamAjlv8ihEg4mLqXf-6_wvmOpYuCjr6I9B0TCDa; JSESSIONID='ajax:3228420206501524135'; G_ENABLED_IDPS=google; AMCVS_14215E3D5995C57C0A495C55%40AdobeOrg=1; AMCV_14215E3D5995C57C0A495C55%40AdobeOrg=-637568504%7CMCIDTS%7C18914%7CMCMID%7C40800350625631250531712310401552477231%7CMCAAMLH-1634749753%7C4%7CMCAAMB-1634749753%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1634152153s%7CNONE%7CvVersion%7C5.1.1%7CMCCIDH%7C1202759587; li_at=AQEDATfk5U0F0G8KAAABfHqhLYAAAAF8nq2xgE4AWGgnwwvICV85OcoYoHO05zsPC7_xnhqQb6n9T0zAmEPKp1X_hsMXCGG5_NWpnPy1Q_5LW0fLH7Ey0khHqx9Uj3WdonC0wFWeoxRsWplBCfD-hwou; liap=true; lang=v=2&lang=en-us; spectroscopyId=ca1a9ec3-25f8-43d0-873c-2f005acffe45; UserMatchHistory=AQLqPVTztmZ6MQAAAXx6oVO3l7hdpNHDEeUhBEM3FrDbQENteeruCbaf5oGNBB5LZQ5ZF9AKAUKVQ3MpzgFvSgz1I78zDrz7qEQZEJWpL_bSeqDvAkti6bI458Z2pVEiXvB-Dte1UfChdZ3B-RjKtNO4BoCz9kq4TCF3Dc-895Sx0sohWbWqSFhCijxSSkrohZRrdTU4Ywl6vygjW5Y0CrES3H1wGrvPLyyqM3jnrzlgiZTD8OhGN-0JqeYbWGN4dfYGsOhFAZHemGw04wBoAxdw4LGGv-udCfxZ7ws; AnalyticsSyncHistory=AQIWmjq1wTdImwAAAXx6oVO3FwNZmgyu7cZPOARgwIAu-KHJEUNOnbOsiRRH0TBqUNsvQzg0Lsua4kTiuQI8FQ; lms_ads=AQGx-otjPXkkdQAAAXx6oVT5qLfiSlzkhVCQZGCJf8zVU9mOyoifU8s1Ak8vXGzyO4FZW6rwVwYT-aob6QNhStM0aYW8a4dj; lms_analytics=AQGx-otjPXkkdQAAAXx6oVT5qLfiSlzkhVCQZGCJf8zVU9mOyoifU8s1Ak8vXGzyO4FZW6rwVwYT-aob6QNhStM0aYW8a4dj; lidc='b=TB89:s=T:r=T:a=T:p=T:g=2661:u=5:x=1:i=1634144966:t=1634183032:v=2:sig=AQEfpN_Zh2-ETOq82oLdRWZeuzrGIDwQ'; li_a=AQJ2PTEmc2FsZXNfY2lkPTk2ODk1MjcwNyUzQSUzQTMxMTkwNzgwN6k-qC_VOfGfK4SZ1oQP_PsZwajs"
+      "cookie": "li_sugr=f158f3ac-77e6-447e-b2af-9545fc5d9e06; bcookie=\"v=2&c9eb21a4-fc2f-4f29-8659-b41b16dd4ecf\"; bscookie=\"v=1&20211001172434d70910a8-e1cc-49e9-8aa0-0ecff8027596AQFEM3tpoixToYXNm3jTfcXXrkcKWORt\"; aam_uuid=40577756698522595741660832106329087972; g_state={\"i_p\":1633116282895,\"i_l\":1}; _gcl_au=1.1.685508982.1633109242; timezone=America/Bogota; _guid=0fcb2493-f4c3-46d2-9ca0-1ca73e9ccc95; __ssid=aadffd93-2af2-4702-a697-ec3571abb081; _ga=GA1.2.1481398525.1633109501; dfpfpt=d88a4d9619c74e1a8a91bbb653ca0471; li_rm=AQENfHtB8yo-BQAAAXw8-eleeGwbNTt6zKYjMjYBqdE2ZSESsoHTQoBG2X1AlNE9SnFtJADOYuNtVjJlnamAjlv8ihEg4mLqXf-6_wvmOpYuCjr6I9B0TCDa; JSESSIONID=\"ajax:3228420206501524135\"; G_ENABLED_IDPS=google; AnalyticsSyncHistory=AQIWmjq1wTdImwAAAXx6oVO3FwNZmgyu7cZPOARgwIAu-KHJEUNOnbOsiRRH0TBqUNsvQzg0Lsua4kTiuQI8FQ; lms_ads=AQGx-otjPXkkdQAAAXx6oVT5qLfiSlzkhVCQZGCJf8zVU9mOyoifU8s1Ak8vXGzyO4FZW6rwVwYT-aob6QNhStM0aYW8a4dj; lms_analytics=AQGx-otjPXkkdQAAAXx6oVT5qLfiSlzkhVCQZGCJf8zVU9mOyoifU8s1Ak8vXGzyO4FZW6rwVwYT-aob6QNhStM0aYW8a4dj; spectroscopyId=d02aaf7c-d4f7-4dd4-bca6-09acaa7cf8ca; AMCVS_14215E3D5995C57C0A495C55%40AdobeOrg=1; AMCV_14215E3D5995C57C0A495C55%40AdobeOrg=-637568504%7CMCIDTS%7C18916%7CMCMID%7C40800350625631250531712310401552477231%7CMCAAMLH-1634920946%7C4%7CMCAAMB-1634920946%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1634323346s%7CNONE%7CvVersion%7C5.1.1%7CMCCIDH%7C1202759587; _gid=GA1.2.1674209641.1634316611; at_check=true; s_ips=1269; s_cc=true; visit=\"v=1&M\"; liap=true; li_at=AQEDATfk5U0C9YuoAAABfITedaMAAAF8qOr5o04AZ0kv_pSlBDEVFyO7S8ebc6i9mVexd_wWfDH2bn-Nptr-uGrzXtYJ5VuvSzsnHEhkmEWLRvO4QoemXqf4f08YqN4l67n2Pwm7ZM6ILIgzQrCa-iVa; cap_session_id=3688678656:1; li_er=v=1&r=urn:li:contract:369488136&t=1632613776803&g=MDIxBVpKQAnHlsYnTW3Pnu5ew2jxltPKFBvgp5f5IHIs2rg=; sdsc=53%3A1%2C1634316733074%7ECACT%2C0%7ECAOR%2C14691%7ECAST%2C14723%7EJOBS%2C585P8hHYewUPC4yingoHZOUuLd%2BpE0%3D; u_tz=GMT-05:00; li_a=AQJ2PTEmc2FsZXNfY2lkPTk2ODk1MjcwNyUzQSUzQTMxMTkwNzgwN1qQvw5-u1bX_am5TBIKSpUr0IeW; PLAY_LANG=es; PLAY_SESSION=eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InNlc3Npb25faWQiOiIyZTkwN2JlNy1iMjZlLTQwNWMtYWI3ZC04ZTIwNTExYWM2MmZ8MTYzNDMxNzI2OSIsImFsbG93bGlzdCI6Int9IiwicmVjZW50bHktc2VhcmNoZWQiOiIiLCJyZWZlcnJhbC11cmwiOiJodHRwczovL3d3dy5nb29nbGUuY29tLyIsImFpZCI6IiIsIlJOVC1pZCI6InwwIiwicmVjZW50bHktdmlld2VkIjoiMTE3MDg0IiwiQ1BULWlkIjoiWMK0wo1hw5NSXHUwMDBFwovCtGbCpzUzXHUwMDExV8OOIiwiZXhwZXJpZW5jZSI6ImVudGl0eSIsImlzX25hdGl2ZSI6ImZhbHNlIiwidHJrIjoiIn0sIm5iZiI6MTYzNDMxNzI3MSwiaWF0IjoxNjM0MzE3MjcxfQ.4l0i3Wo17WQp2ekBXdQfSqHu8YxQyYmqtm3suQijZ9Q; lang=v=2&lang=en-us; SID=cac27ffe-3b8b-4ee9-9406-bef2f2ff3116; VID=V_2021_10_15_17_481; _gac_UA-62256447-1=1.1634317525.EAIaIQobChMI4YyzmfPM8wIVA7LICh30uALsEAAYASAAEgKWhPD_BwE; mbox=session#4850ee71148e4e80b241a0b8105fbe67#1634318510|PC#4850ee71148e4e80b241a0b8105fbe67.34_0#1649869525; gpv_pn=business.linkedin.com%2Fes-es%2Fsales-solutions%2Fcx%2Flinkedin-sales-navigator; _gcl_aw=GCL.1634317525.EAIaIQobChMI4YyzmfPM8wIVA7LICh30uALsEAAYASAAEgKWhPD_BwE; _gcl_dc=GCL.1634317525.EAIaIQobChMI4YyzmfPM8wIVA7LICh30uALsEAAYASAAEgKWhPD_BwE; s_plt=3.86; s_pltp=business.linkedin.com%2Fes-es%2Fsales-solutions%2Fcx%2Flinkedin-sales-navigator; s_tp=2906; s_tslv=1634317544786; UserMatchHistory=AQJ3j804zd-fjAAAAXyE6si8h_CkBu5cRmXu0v0yOXQEuODu-TqlW0kdo6Zu5FKoPL8SOwLPywJ8pzyRAaOIe7cnGHjCbahMyMFGnSTi9-rxrW3bDgDKE5qbdv0ybvwAGXnudLNV_Yj4KUN6IwARWYun07c-K-Al_yt-wBXirwPMAHWK8vgh7o-4VV8YQwW9RJxTfNmXpJIqOlL34wrcCRjJ0fpd__NyhkFSxtT6CRNvdZUrIxdY0wDTElCTLuJO2zMGEU0TzM5vpthV7qktilfJGqws1Qo10dFzbMY; lidc=\"b=TB89:s=T:r=T:a=T:p=T:g=2665:u=7:x=1:i=1634317552:t=1634389270:v=2:sig=AQEKN4_c4DSf1KlzusRW32zYDVCDt-sK\"; s_ppv=business.linkedin.com%2Fes-es%2Fsales-solutions%2Fcx%2Flinkedin-sales-navigator%2C100%2C44%2C2906%2C2%2C2"
     },
-    "referrer": "https://www.linkedin.com/sales/search/people?savedSearchId=50540467&searchSessionId=dMkQVeUhTueKj3uPGWJBWA%3D%3D",
+    "referrer": "https://www.linkedin.com/sales/search/people?savedSearchId=50540467&searchSessionId=IinmrRnKSnq7vhr86PcK7Q%3D%3D",
     "referrerPolicy": "strict-origin-when-cross-origin",
     "body": null,
     "method": "GET",
     "mode": "cors"
   });
-
   return await result.json();
 }
 
@@ -121,7 +120,7 @@ db.once('open', async function () {
         assert.ok(promise instanceof Promise);
 
         await promise.then(async function (doc) {
-          console.log(":D - %s from %s saved to profiles collection.", co_founders[i].fullname, co_founders[i].companyName);
+          console.log(":D - %s from %s saved to co-founders collection.", co_founders[i].fullname, co_founders[i].companyName);
           success++;
         });
         await promise.catch(async (err) => console.log(err));
@@ -131,7 +130,7 @@ db.once('open', async function () {
         ignored++;
       }
     });
-    console.log("* Profiles processed: %d/%d", (i + 1), co_founders.length);
+    console.log("* Profiles processed: %d/%d saved: %d ignored: %d" , (i + 1), co_founders.length, success, ignored);
     if (i === co_founders.length - 1 ) {
       console.log('------ Exporting data process ended ------' , i);
       process.exit(0);
