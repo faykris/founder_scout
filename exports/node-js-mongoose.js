@@ -55,10 +55,12 @@ db.once('open', async function () {
   // compile schema to model
   const Cof = mongoose.model('Co-Founders', FounderSchema, 'co-founders');
 
-  let rawdata =  fs.readFileSync('2021-10-04T13:36:00.342Z.json');
+  let rawdata =  fs.readFileSync('2021-10-15T00:26:09.921Z.json');
   let co_founders = JSON.parse(rawdata);
 
   console.log('----- Starting exporting data process -----');
+  let success = 0;
+  let ignored = 0;
   for (let i = 0; i < co_founders.length; i++) { // co_founders.length
     let all_cof_info = {"profileInfo": {}, "companyInfo": {location: {}, createdAt: {}}};
     const companyId = co_founders[i].companyId;
@@ -67,68 +69,68 @@ db.once('open', async function () {
     const max = 30;
     const time = (Math.random() * (max - min) + min).toFixed();
 
-    if (companyId !== undefined) { // if companyId exists!
-      const promise = Cof.findOne({"profileInfo.vmid": vmid}).exec();
-      assert.ok(promise instanceof Promise);
+    const promise = Cof.findOne({"profileInfo.vmid": vmid}).exec();
+    assert.ok(promise instanceof Promise);
 
-      await promise.then(async function (cof) {
-        if (cof === null) { // if profile doesn't exists on the database
-          console.log('---> Scraping company information of %s in %d seconds... ', co_founders[i].fullname, time);
-          await sleep(time * 1000);
+    await promise.then(async function (cof) {
+      if (cof === null) { // if profile doesn't exists in the database
+        console.log('---> Scraping company information of %s in %d seconds... ', co_founders[i].fullname, time);
+        await sleep(time * 1000);
+        const companyInfo = {}
+        if (companyId !== undefined) {
           const companyInfo = await company_info(companyId).catch((err) => console.error(err));
-
-            // filling in profile info
-            all_cof_info.profileInfo['vmid'] = vmid;
-            all_cof_info.profileInfo['profileUrl'] = co_founders[i].profileUrl;
-            all_cof_info.profileInfo['linkedInProfileUrl'] = co_founders[i].linkedInProfileUrl;
-            all_cof_info.profileInfo['firstName'] = co_founders[i].firstName;
-            all_cof_info.profileInfo['lastName'] = co_founders[i].lastName;
-            all_cof_info.profileInfo['fullName'] = co_founders[i].fullname;
-            all_cof_info.profileInfo['title'] = co_founders[i].title;
-            all_cof_info.profileInfo['location'] = co_founders[i].location;
-            all_cof_info.profileInfo['isPremium'] = co_founders[i].premium;
-            all_cof_info.profileInfo['profileImageUrl'] = co_founders[i].profileImageUrl;
-            // filling in company info
-            all_cof_info.companyInfo['companyId'] = co_founders[i].companyId;
-            all_cof_info.companyInfo['companyUrl'] = co_founders[i].companyUrl;
-            if (companyInfo.website !== undefined) {
-              all_cof_info.companyInfo['websiteUrl'] = companyInfo.website;
-            }
-            all_cof_info.companyInfo['companyName'] = co_founders[i].companyName;
-            all_cof_info.companyInfo['industry'] = co_founders[i].industry;
-            if (companyInfo.headquarters !== undefined) {
-              all_cof_info.companyInfo.location['country'] = companyInfo.headquarters.country;
-              all_cof_info.companyInfo.location['city'] = companyInfo.headquarters.city;
-            }
-            all_cof_info.companyInfo.createdAt['month'] = co_founders[i].month;
-            all_cof_info.companyInfo.createdAt['year'] = co_founders[i].year;
-            if (companyInfo.companyPictureDisplayImage !== undefined) {
-              all_cof_info.companyInfo['companyImageUrl'] = companyInfo.companyPictureDisplayImage.rootUrl +
-                companyInfo.companyPictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
-            }
-            all_cof_info.companyInfo['summary'] = co_founders[i].summary;
-            all_cof_info.companyInfo['timestamp'] = co_founders[i].timestamp;
-
-            // a document instance
-            const co_founder = new Cof(all_cof_info);
-
-            // save model to database
-            const promise = co_founder.save();
-            assert.ok(promise instanceof Promise);
-
-            await promise.then(async function (doc) {
-              console.log(":D - %s from %s saved to profiles collection.", co_founders[i].fullname, co_founders[i].companyName);
-            });
-            await promise.catch(async (err) => console.log(err));
         }
-        else {
-            console.log(":| - %s from %s already exists in the collection. Ignored.", co_founders[i].fullname, co_founders[i].companyName);
+
+        // filling in profile info
+        all_cof_info.profileInfo['vmid'] = vmid;
+        all_cof_info.profileInfo['profileUrl'] = co_founders[i].profileUrl;
+        all_cof_info.profileInfo['linkedInProfileUrl'] = co_founders[i].linkedInProfileUrl;
+        all_cof_info.profileInfo['firstName'] = co_founders[i].firstName;
+        all_cof_info.profileInfo['lastName'] = co_founders[i].lastName;
+        all_cof_info.profileInfo['fullName'] = co_founders[i].fullname;
+        all_cof_info.profileInfo['title'] = co_founders[i].title;
+        all_cof_info.profileInfo['location'] = co_founders[i].location;
+        all_cof_info.profileInfo['isPremium'] = co_founders[i].premium;
+        all_cof_info.profileInfo['profileImageUrl'] = co_founders[i].profileImageUrl;
+        // filling in company info
+        all_cof_info.companyInfo['companyId'] = co_founders[i].companyId;
+        all_cof_info.companyInfo['companyUrl'] = co_founders[i].companyUrl;
+        if (companyInfo.length !== 0 && companyInfo.website !== undefined) {
+          all_cof_info.companyInfo['websiteUrl'] = companyInfo.website;
         }
-      });
-    }
-    else {
-      console.error(":( companyId not found in %s, ignored.", co_founders[i].fullname);
-    }
+        all_cof_info.companyInfo['companyName'] = co_founders[i].companyName;
+        all_cof_info.companyInfo['industry'] = co_founders[i].industry;
+        if (companyInfo.length !== 0 && companyInfo.headquarters !== undefined) {
+          all_cof_info.companyInfo.location['country'] = companyInfo.headquarters.country;
+          all_cof_info.companyInfo.location['city'] = companyInfo.headquarters.city;
+        }
+        all_cof_info.companyInfo.createdAt['month'] = co_founders[i].month;
+        all_cof_info.companyInfo.createdAt['year'] = co_founders[i].year;
+        if (companyInfo.length !== 0 && companyInfo.companyPictureDisplayImage !== undefined) {
+          all_cof_info.companyInfo['companyImageUrl'] = companyInfo.companyPictureDisplayImage.rootUrl +
+            companyInfo.companyPictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
+        }
+        all_cof_info.companyInfo['summary'] = co_founders[i].summary;
+        all_cof_info.companyInfo['timestamp'] = co_founders[i].timestamp;
+
+        // a document instance
+        const co_founder = new Cof(all_cof_info);
+
+        // save model to database
+        const promise = co_founder.save();
+        assert.ok(promise instanceof Promise);
+
+        await promise.then(async function (doc) {
+          console.log(":D - %s from %s saved to profiles collection.", co_founders[i].fullname, co_founders[i].companyName);
+          success++;
+        });
+        await promise.catch(async (err) => console.log(err));
+      }
+      else {
+        console.log(":| - %s from %s already exists in the collection. Ignored.", co_founders[i].fullname, co_founders[i].companyName);
+        ignored++;
+      }
+    });
     console.log("* Profiles processed: %d/%d", (i + 1), co_founders.length);
     if (i === co_founders.length - 1 ) {
       console.log('------ Exporting data process ended ------' , i);
