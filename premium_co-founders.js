@@ -2,17 +2,27 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 
 
-let profileList = [];
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function linkedInSearch(p_list, count, success, fail) { // filter by country: Colombia -> bingGeo:(includedValues:List((id:100876405))),
+async function linkedInSearch(p_list, count) { // filter by country: Colombia -> bingGeo:(includedValues:List((id:100876405))),
   const result = await fetch("https://www.linkedin.com/sales-api/salesApiPeopleSearch?" +
     "q=peopleSearchQuery&" +
     "start="+ String(count) + "&" +
-    "count=25&" +
-    "query=(companySize:List(B),doFetchHeroCard:false,bingGeo:(includedValues:List((id:103644278),(id:101174742),(id:106057199),(id:103323778),(id:100446943),(id:100876405),(id:102927786),(id:104621616),(id:106373116))),recentSearchParam:(doLogHistory:true),spotlightParam:(selectedType:ALL),titleV2:(scope:CURRENT,includedValues:List((text:Co-Founder,id:103))),tenureAtCurrentCompany:List(1),tenureAtCurrentPosition:List(1),trackingParam:(sessionId:1MuzrhWbSC2zjyMiJhKnbw==),doFetchFilters:true,doFetchHits:true,doFetchSpotlights:true)&decorationId=com.linkedin.sales.deco.desktop.search.DecoratedPeopleSearchHitResult-10", {
+    "count=100&" +
+    "query=(companySize:List(B)," +
+            "doFetchHeroCard:false," +
+            "bingGeo:(includedValues:List((id:103323778)))," +
+            "recentSearchParam:(doLogHistory:true)," +
+            "spotlightParam:(selectedType:ALL)," +
+            "titleV2:(scope:CURRENT,includedValues:List((text:Co-Founder,id:103)))," +
+            "tenureAtCurrentCompany:List(1)," +
+            "tenureAtCurrentPosition:List(1)," +
+            "trackingParam:(sessionId:1MuzrhWbSC2zjyMiJhKnbw==)," +
+            "doFetchFilters:true," +
+            "doFetchHits:true,doFetchSpotlights:true)&" +
+    "decorationId=com.linkedin.sales.deco.desktop.search.DecoratedPeopleSearchHitResult-10", {
     "headers": {
       "accept": "*/*",
       "accept-language": "es-ES,es;q=0.9",
@@ -36,97 +46,76 @@ async function linkedInSearch(p_list, count, success, fail) { // filter by count
     "mode": "cors"
   });
 
+  const min = 5;
+  const max = 30;
    // salesApiPeopleSearch?q=peopleSearchQuery&start=0
-  console.log("count: %d success: %d fail: %d", count, success, fail);
   const cof_filter = await result.json();
   if (cof_filter.status > 399) {
     console.log("Error fetching data: status ", cof_filter.status)
     return p_list;
   }
-  let total = count;
 
   for (let i = 0; i < cof_filter['elements'].length ;i++) {
-    try {
-      let profileDict = {};
-      let companyUrl = String(cof_filter['elements'][i].currentPositions[0].companyUrn).split(':')[3];
-      let profileUrl = String(cof_filter['elements'][i].entityUrn).split(/[()]+/)[1];
-      let linkedInProfileUrl = String(cof_filter['elements'][i].entityUrn).split(/[(),]+/)[1];
+    let profileDict = {};
+    let companyUrl = String(cof_filter['elements'][i].currentPositions[0].companyUrn).split(':')[3];
+    let profileUrl = String(cof_filter['elements'][i].entityUrn).split(/[()]+/)[1];
+    let linkedInProfileUrl = String(cof_filter['elements'][i].entityUrn).split(/[(),]+/)[1];
 
-      profileDict['vmid'] = linkedInProfileUrl;
-      profileDict['profileUrl'] = 'https://www.linkedin.com/in/' + profileUrl + '/';
-      profileDict['fullname'] = cof_filter['elements'][i].fullName;
-      profileDict['firstName'] = cof_filter['elements'][i].firstName;
-      profileDict['lastName'] = cof_filter['elements'][i].lastName;
-      profileDict['companyName'] = cof_filter['elements'][i].currentPositions[0].companyName;
-      profileDict['title'] = cof_filter['elements'][i].currentPositions[0].title;
-
-      if (companyUrl !== undefined) {
-        profileDict['companyId'] = companyUrl;
-        profileDict['companyUrl'] = 'https://www.linkedin.com/company/' + companyUrl + '/';
-      } else {
-        profileDict['companyId'] = undefined;
-        profileDict['companyUrl'] = undefined;
-      }
-
-      profileDict['location'] = cof_filter['elements'][i].geoRegion;
-
-      if (cof_filter['elements'][i].currentPositions[0].companyUrnResolutionResult !== undefined) {
-        profileDict['industry'] = cof_filter['elements'][i].currentPositions[0].companyUrnResolutionResult.industry;
-      } else {
-        profileDict['industry'] = undefined;
-      }
-
-      if (cof_filter['elements'][i].profilePictureDisplayImage !== undefined) {
-        profileDict['profileImageUrl'] = cof_filter['elements'][i].profilePictureDisplayImage.rootUrl +
-          cof_filter['elements'][i].profilePictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
-      } else {
-        profileDict['profileImageUrl'] = undefined;
-      }
-
-      if (cof_filter['elements'][i].currentPositions[0].startedOn !== undefined) {
-        profileDict['month'] = cof_filter['elements'][i].currentPositions[0].startedOn.month;
-        profileDict['year'] = cof_filter['elements'][i].currentPositions[0].startedOn.year;
-      } else {
-        profileDict['month'] = undefined;
-        profileDict['year'] = undefined;
-      }
-
-      if (linkedInProfileUrl !== undefined) profileDict['linkedInProfileUrl'] = 'https://www.linkedin.com/in/' + linkedInProfileUrl + '/';
-      else profileDict['linkedInProfileUrl'] = undefined;
-
-      profileDict['summary'] = cof_filter['elements'][i].summary;
-      profileDict['premium'] = cof_filter['elements'][i].premium;
-      profileDict['timestamp'] = new Date().toISOString();
-
-      p_list.push(profileDict);
-      success++;
+    profileDict['vmid'] = linkedInProfileUrl;
+    profileDict['profileUrl'] = 'https://www.linkedin.com/in/' + profileUrl + '/';
+    profileDict['fullname'] = cof_filter['elements'][i].fullName;
+    profileDict['firstName'] = cof_filter['elements'][i].firstName;
+    profileDict['lastName'] = cof_filter['elements'][i].lastName;
+    profileDict['companyName'] = cof_filter['elements'][i].currentPositions[0].companyName;
+    profileDict['title'] = cof_filter['elements'][i].currentPositions[0].title;
+    if (companyUrl !== undefined) {
+      profileDict['companyId'] = companyUrl;
+      profileDict['companyUrl'] = 'https://www.linkedin.com/company/' + companyUrl + '/';
     }
-    catch (err) {
-      console.log(total + i, " Failed..: ", cof_filter['elements'][i].fullName);
-      console.log(err);
-      fail++;
+    profileDict['location'] = cof_filter['elements'][i].geoRegion;
+    if (cof_filter['elements'][i].currentPositions[0].companyUrnResolutionResult !== undefined) {
+      profileDict['industry'] = cof_filter['elements'][i].currentPositions[0].companyUrnResolutionResult.industry;
     }
+    if (cof_filter['elements'][i].profilePictureDisplayImage !== undefined) {
+      profileDict['profileImageUrl'] =
+        cof_filter['elements'][i].profilePictureDisplayImage.rootUrl +
+        cof_filter['elements'][i].profilePictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
+    }
+    if (cof_filter['elements'][i].currentPositions[0].startedOn !== undefined) {
+      profileDict['month'] = cof_filter['elements'][i].currentPositions[0].startedOn.month;
+      profileDict['year'] = cof_filter['elements'][i].currentPositions[0].startedOn.year;
+    }
+    if (linkedInProfileUrl !== undefined) {
+      profileDict['linkedInProfileUrl'] = 'https://www.linkedin.com/in/' + linkedInProfileUrl + '/';
+    }
+    profileDict['summary'] = cof_filter['elements'][i].summary;
+    profileDict['premium'] = cof_filter['elements'][i].premium;
+    profileDict['timestamp'] = new Date().toISOString();
+
+    p_list.push(profileDict);
     count++;
   }
-  console.log("Processed", success + fail, "/", cof_filter.paging.total, "LinkedIn profiles," +
-              " success:", success, "failed:", fail);
-  if (total + 100 > cof_filter.paging.total) {
+
+  console.log("Processed", count, "/", cof_filter.paging.total, "LinkedIn profiles");
+  if (count >= cof_filter.paging.total) {
     return p_list;
   }
   else {
-    await sleep(5000);
-    return await linkedInSearch(p_list, count, success, fail);
+    const time = (Math.random() * (max - min) + min).toFixed();
+    console.log('---> Scraping the following profiles in ' + time + ' seconds... ');
+    await sleep(time * 1000);
+    return await linkedInSearch(p_list, count);
   }
 }
 
-const totalProfiles = await linkedInSearch(profileList,2400 , 0 , 0);
-//console.log(totalProfiles);
-//console.log("Total records:", totalProfiles.length);
+let profileList = [];
+// **** Execute profile scraper function ****
+const totalProfiles = await linkedInSearch(profileList,0);
 
 'use strict';
 let data = JSON.stringify(totalProfiles);
 let filename = new Date().toISOString()
-//console.log(filename)
+
 fs.writeFile(filename +".json", data, function(err) {
   if(err) console.log('Error saving profiles ', err);
   else console.log('Profiles successfully saved!');

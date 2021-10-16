@@ -13,13 +13,15 @@ router.post('/co_founders', (req, res) => {
     .catch((error) => res.json({message: error}));
 });
 
-// get all co-founder
+// get all co-founder - not allowed
+/*
 router.get('/co_founders', (req, res) => {
   cofSchema
     .find()
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}));
 });
+*/
 
 // get only one specific co-founder
 router.get('/co_founders/:vmid', cors(), (req, res) => {
