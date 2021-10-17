@@ -5,7 +5,7 @@ import cors from 'cors';
 const router = express.Router();
 
 // create co-founder
-router.post('/co_founders', (req, res) => {
+router.post('/co-founders', (req, res) => {
   const cof = cofSchema(req.body);
   cof
     .save()
@@ -13,7 +13,7 @@ router.post('/co_founders', (req, res) => {
     .catch((error) => res.json({message: error}));
 });
 
-// get all co-founder - not allowed
+// get all co-founders - not allowed
 /*
 router.get('/co_founders', (req, res) => {
   cofSchema
@@ -23,10 +23,74 @@ router.get('/co_founders', (req, res) => {
 });
 */
 
-// get only one specific co-founder
-router.get('/co_founders/:vmid', cors(), (req, res) => {
+// get only one specific co-founder by vmid
+router.get('/co-founders/vmid/:vmid', cors(), (req, res) => {
   cofSchema
-    .find({"profileInfo.vmid" : { $eq: req.params.vmid }})
+    .findOne({"profileInfo.vmid" : { $eq: req.params.vmid }})
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}));
+});
+
+// get co-founders by country
+router.get('/co-founders/country/:country', cors(), (req, res) => {
+  console.log(req.params.location || undefined);
+  cofSchema
+    .find({"companyInfo.location.country": { $regex: new RegExp(req.params.country), $options: "i" }})
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}));
+});
+
+// get co-founders by country on current year
+router.get('/co-founders/country/:country/:year', cors(), (req, res) => {
+  console.log(req.params.location || undefined);
+  cofSchema
+    .find({$and: [{"companyInfo.location.country": { $regex: new RegExp(req.params.location), $options: "i" }},
+         {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}}
+         ]})
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}));
+});
+
+// get co-founders by country on current year and month
+router.get('/co-founders/country/:location/:year/:month', cors(), (req, res) => {
+  console.log(req.params.location || undefined);
+  cofSchema
+    .find({$and: [{"companyInfo.location.country": { $regex: new RegExp(req.params.location), $options: "i" }},
+         {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}},
+         {"companyInfo.createdAt.month": {$eq: parseInt(req.params.month)}}
+         ]})
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}));
+});
+
+// get co-founders by city
+router.get('/co-founders/city/:city', cors(), (req, res) => {
+  console.log(req.params.location || undefined);
+  cofSchema
+    .find({"companyInfo.location.city": { $regex: new RegExp("^" + req.params.city + "$", "i")} })
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}));
+});
+
+// get co-founders by city on current year
+router.get('/co-founders/city/:city/:year', cors(), (req, res) => {
+  console.log(req.params.location || undefined);
+  cofSchema
+    .find({$and: [{"companyInfo.location.city": { $regex: new RegExp("^" + req.params.city + "$", "i")}},
+        {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}}
+      ]})
+    .then((data) => res.json(data))
+    .catch((error) => res.json({message: error}));
+});
+
+// get co-founders by city on current year and month
+router.get('/co-founders/city/:city/:year/:month', cors(), (req, res) => {
+  console.log(req.params.location || undefined);
+  cofSchema
+    .find({$and: [{"companyInfo.location.city": { $regex: new RegExp("^" + req.params.city + "$", "i")}},
+        {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}},
+        {"companyInfo.createdAt.month": {$eq: parseInt(req.params.month)}}
+      ]})
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}));
 });

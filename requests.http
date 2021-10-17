@@ -1,5 +1,5 @@
 ###
-POST http://localhost:9000/api/co_founders HTTP/1.1
+POST http://localhost:9000/api/v1/co-founders HTTP/1.1
 Content-Type: application/json
 
 {
@@ -34,8 +34,19 @@ Content-Type: application/json
   }
 }
 
-###
-GET http://localhost:9000/api/co_founders HTTP/1.1
+
 
 ###
-GET http://localhost:9000/api/co_founders/ACwAADLUE7QB1j0GzI2FTPf4DYMsM_aSeN0tx6o HTTP/1.1
+GET http://localhost:9000/api/v1/co-founders/vmid/ACwAADLUE7QB1j0GzI2FTPf4DYMsM_aSeN0tx6o HTTP/1.1
+
+###
+GET http://localhost:9000/api/v1/co-founders/country/mexico
+
+###
+GET http://localhost:9000/api/v1/co-founders/country/united states/2021/7
+
+###
+GET http://localhost:9000/api/v1/co-founders/city/bogota
+
+###
+GET http://localhost:9000/api/v1/co-founders/city/bogota/2021/1

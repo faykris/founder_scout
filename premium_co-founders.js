@@ -13,7 +13,7 @@ async function linkedInSearch(p_list, count) { // filter by country: Colombia ->
     "count=100&" +
     "query=(companySize:List(B)," +
             "doFetchHeroCard:false," +
-            "bingGeo:(includedValues:List((id:103323778)))," +
+            "bingGeo:(includedValues:List((id:106373116)))," +
             "recentSearchParam:(doLogHistory:true)," +
             "spotlightParam:(selectedType:ALL)," +
             "titleV2:(scope:CURRENT,includedValues:List((text:Co-Founder,id:103)))," +
