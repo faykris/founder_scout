@@ -33,12 +33,11 @@ async function company_info(companyId) {
     "method": "GET",
     "mode": "cors"
   });
-
   return await result.json();
 }
 
 if (process.argv.length !== 3) {
-  console.log("Usage: node node-js-mongoose.js [FILE.JSON]");
+  console.log("Usage: node [NODE_SCRIPT] [FILE.JSON]");
   process.exit(1);
 }
 
@@ -52,97 +51,99 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', async function () {
-  console.log("Connection Successful!");
+  console.log("Connected to MongoDB Atlas");
 
-  // define Schema
+  // Define default schema
   const FounderSchema = mongoose.Schema(
     {},
     {strict: false}
   );
-  // compile schema to model
+  // Compile schema to model
   const Cof = mongoose.model('Co-Founders', FounderSchema, 'co-founders');
 
-  let rawdata =  fs.readFileSync(process.argv[2]); // '2021-10-15T00:26:09.921Z.json'
+  let rawdata =  fs.readFileSync(process.argv[2]);
   let co_founders = JSON.parse(rawdata);
 
-  console.log('----- Starting exporting data process -----');
+  console.log('---------- Starting exporting data process ----------');
   let success = 0;
   let ignored = 0;
-  for (let i = 0; i < co_founders.length; i++) { // co_founders.length
-    let all_cof_info = {"profileInfo": {}, "companyInfo": {location: {}, createdAt: {}}};
-    const companyId = co_founders[i].companyId;
-    const vmid = co_founders[i].vmid;
-    const time = (Math.random() * (max - min) + min).toFixed();
+  for (let i = 0; i < co_founders.length; i++) {
+    try {
+      let all_cof_info = {"profileInfo": {}, "companyInfo": {location: {}, createdAt: {}}};
+      const companyId = co_founders[i].companyId;
+      const vmid = co_founders[i].vmid;
+      const time = (Math.random() * (max - min) + min).toFixed();
 
-    const promise = Cof.findOne({"profileInfo.vmid": vmid}).exec();
-    assert.ok(promise instanceof Promise);
+      const promise = Cof.findOne({"profileInfo.vmid": vmid}).exec();
+      assert.ok(promise instanceof Promise);
 
-    await promise.then(async function (cof) {
-      if (cof === null) { // if profile doesn't exists in the database
-        console.log('---> Scraping company information of %s in %d seconds... ', co_founders[i].fullname, time);
-        await sleep(time * 1000);
-        const companyInfo = {}
-        if (companyId !== undefined) {
-          const companyInfo = await company_info(companyId).catch((err) => console.error(err));
-          // filling in profile info
-          all_cof_info.profileInfo['vmid'] = vmid;
-          all_cof_info.profileInfo['profileUrl'] = co_founders[i].profileUrl;
-          all_cof_info.profileInfo['linkedInProfileUrl'] = co_founders[i].linkedInProfileUrl;
-          all_cof_info.profileInfo['firstName'] = co_founders[i].firstName;
-          all_cof_info.profileInfo['lastName'] = co_founders[i].lastName;
-          all_cof_info.profileInfo['fullName'] = co_founders[i].fullname;
-          all_cof_info.profileInfo['title'] = co_founders[i].title;
-          all_cof_info.profileInfo['location'] = co_founders[i].location;
-          all_cof_info.profileInfo['isPremium'] = co_founders[i].premium;
-          all_cof_info.profileInfo['profileImageUrl'] = co_founders[i].profileImageUrl;
-          // filling in company info
-          all_cof_info.companyInfo['companyId'] = co_founders[i].companyId;
-          all_cof_info.companyInfo['companyUrl'] = co_founders[i].companyUrl;
-          if (companyInfo !== {} && companyInfo.website !== undefined) {
-            all_cof_info.companyInfo['websiteUrl'] = companyInfo.website;
+      await promise.then(async function (cof) {
+        if (cof === null) { // if profile doesn't exists in the database
+          console.log('---> Scraping company information of %s in %d seconds... ', co_founders[i].fullname, time);
+          await sleep(time * 1000);
+          const companyInfo = {}
+          if (companyId !== undefined) {
+            const companyInfo = await company_info(companyId).catch((err) => console.error(err));
+            // filling in profile info
+            all_cof_info.profileInfo['vmid'] = vmid;
+            all_cof_info.profileInfo['profileUrl'] = co_founders[i].profileUrl;
+            all_cof_info.profileInfo['linkedInProfileUrl'] = co_founders[i].linkedInProfileUrl;
+            all_cof_info.profileInfo['firstName'] = co_founders[i].firstName;
+            all_cof_info.profileInfo['lastName'] = co_founders[i].lastName;
+            all_cof_info.profileInfo['fullName'] = co_founders[i].fullname;
+            all_cof_info.profileInfo['title'] = co_founders[i].title;
+            all_cof_info.profileInfo['location'] = co_founders[i].location;
+            all_cof_info.profileInfo['isPremium'] = co_founders[i].premium;
+            all_cof_info.profileInfo['profileImageUrl'] = co_founders[i].profileImageUrl;
+            // filling in company info
+            all_cof_info.companyInfo['companyId'] = co_founders[i].companyId;
+            all_cof_info.companyInfo['companyUrl'] = co_founders[i].companyUrl;
+            if (companyInfo !== {} && companyInfo.website !== undefined) {
+              all_cof_info.companyInfo['websiteUrl'] = companyInfo.website;
+            }
+            all_cof_info.companyInfo['companyName'] = co_founders[i].companyName;
+            all_cof_info.companyInfo['industry'] = co_founders[i].industry;
+            if (companyInfo !== {} && companyInfo.headquarters !== undefined) {
+              all_cof_info.companyInfo.location['country'] = companyInfo.headquarters.country;
+              all_cof_info.companyInfo.location['city'] = companyInfo.headquarters.city;
+            }
+            all_cof_info.companyInfo.createdAt['month'] = co_founders[i].month;
+            all_cof_info.companyInfo.createdAt['year'] = co_founders[i].year;
+            if (companyInfo !== {} && companyInfo.companyPictureDisplayImage !== undefined) {
+              all_cof_info.companyInfo['companyImageUrl'] = companyInfo.companyPictureDisplayImage.rootUrl +
+                companyInfo.companyPictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
+            }
+            all_cof_info.companyInfo['summary'] = co_founders[i].summary;
+            all_cof_info.companyInfo['timestamp'] = new Date().toISOString();
+
+            const co_founder = new Cof(all_cof_info);
+
+            const promise = co_founder.save();
+            assert.ok(promise instanceof Promise);
+
+            await promise.then(async function (doc) {
+              console.log(":D - %s from %s saved in the co-founders collection.", co_founders[i].fullname, co_founders[i].companyName);
+              success++;
+            });
+            await promise.catch(async (err) => console.log(err));
           }
-          all_cof_info.companyInfo['companyName'] = co_founders[i].companyName;
-          all_cof_info.companyInfo['industry'] = co_founders[i].industry;
-          if (companyInfo !== {} && companyInfo.headquarters !== undefined) {
-            all_cof_info.companyInfo.location['country'] = companyInfo.headquarters.country;
-            all_cof_info.companyInfo.location['city'] = companyInfo.headquarters.city;
+          else {
+            console.log(":( - %s from %s doesn't have companyId. Ignored.", co_founders[i].fullname, co_founders[i].companyName);
+            ignored++;
           }
-          all_cof_info.companyInfo.createdAt['month'] = co_founders[i].month;
-          all_cof_info.companyInfo.createdAt['year'] = co_founders[i].year;
-          if (companyInfo !== {} && companyInfo.companyPictureDisplayImage !== undefined) {
-            all_cof_info.companyInfo['companyImageUrl'] = companyInfo.companyPictureDisplayImage.rootUrl +
-              companyInfo.companyPictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
-          }
-          all_cof_info.companyInfo['summary'] = co_founders[i].summary;
-          all_cof_info.companyInfo['timestamp'] = new Date().toISOString();
-
-          // a document instance
-          const co_founder = new Cof(all_cof_info);
-
-          // save model to database
-          const promise = co_founder.save();
-          assert.ok(promise instanceof Promise);
-
-          await promise.then(async function (doc) {
-            console.log(":D - %s from %s saved to co-founders collection.", co_founders[i].fullname, co_founders[i].companyName);
-            success++;
-          });
-          await promise.catch(async (err) => console.log(err));
         }
         else {
-          console.log(":( - %s from %s doesn't have companyId. Ignored.", co_founders[i].fullname, co_founders[i].companyName);
+          console.log(":| - %s from %s already exists in the collection. Ignored.", co_founders[i].fullname, co_founders[i].companyName);
           ignored++;
         }
-      }
-      else {
-        console.log(":| - %s from %s already exists in the collection. Ignored.", co_founders[i].fullname, co_founders[i].companyName);
-        ignored++;
-      }
-    });
-    console.log("* Profiles processed: %d/%d saved: %d ignored: %d" , (i + 1), co_founders.length, success, ignored);
-    if (i === co_founders.length - 1 ) {
-      console.log('------ Exporting data process ended ------' , i);
-      process.exit(0);
+      });
+      console.log("* Profiles processed: %d/%d saved: %d ignored: %d" , i + 1, co_founders.length, success, ignored);
+    }
+    catch (exe) {
+      console.error("X( - failed processing company information %s from %s. Ignored.", co_founders[i].fullname, co_founders[i].companyName)
+      console.error(exe);
     }
   }
+  console.log('------------ Exporting data process ended ------------');
+  process.exit(0);
 });

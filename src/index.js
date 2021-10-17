@@ -10,7 +10,7 @@ const port = process.env.PORT || 9000;
 
 // middleware
 app.use(express.json());
-app.use("/api", router);
+app.use("/api/v1", router);
 
 
 // routes
