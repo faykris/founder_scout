@@ -44,7 +44,7 @@ router.get('/co-founders/country/:country', cors(), (req, res) => {
 router.get('/co-founders/country/:country/:year', cors(), (req, res) => {
   console.log(req.params.location || undefined);
   cofSchema
-    .find({$and: [{"companyInfo.location.country": { $regex: new RegExp(req.params.location), $options: "i" }},
+    .find({$and: [{"companyInfo.location.country": { $regex: new RegExp(req.params.country), $options: "i" }},
          {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}}
          ]})
     .then((data) => res.json(data))
@@ -52,10 +52,10 @@ router.get('/co-founders/country/:country/:year', cors(), (req, res) => {
 });
 
 // get co-founders by country on current year and month
-router.get('/co-founders/country/:location/:year/:month', cors(), (req, res) => {
+router.get('/co-founders/country/:country/:year/:month', cors(), (req, res) => {
   console.log(req.params.location || undefined);
   cofSchema
-    .find({$and: [{"companyInfo.location.country": { $regex: new RegExp(req.params.location), $options: "i" }},
+    .find({$and: [{"companyInfo.location.country": { $regex: new RegExp(req.params.country), $options: "i" }},
          {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}},
          {"companyInfo.createdAt.month": {$eq: parseInt(req.params.month)}}
          ]})
