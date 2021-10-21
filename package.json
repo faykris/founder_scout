@@ -1,7 +1,7 @@
 {
   "name": "linkedinexample",
   "version": "1.0.0",
-  "description": "",
+  "description": "Contains the files required for realize the scraping in a company searchers pages.",
   "main": "index.js",
   "scripts": {
     "start": "NODE_OPTIONS='--experimental-specifier-resolution=node' nodemon src/index.js"
@@ -18,5 +18,14 @@
   "type": "module",
   "devDependencies": {
     "nodemon": "^2.0.13"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faykris/final_project.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/faykris/final_project/issues"
+  },
+  "homepage": "https://github.com/faykris/final_project#readme"
 }

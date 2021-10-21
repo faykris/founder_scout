@@ -1,11 +1,9 @@
 import fetch from 'node-fetch';
-import fs from 'fs';
-//import { count } from 'console';
-
+import sleep from "./sleep.js";
 
 export default async function co_founders_search(p_list, geoId, count) { // filter by country: Colombia -> bingGeo:(includedValues:List((id:100876405))),
   const result = await fetch("https://www.linkedin.com/sales-api/salesApiPeopleSearch?" +
-    "q=peopleSearchQuery&start=" + String(count) + "&count=25&query=(companySize:List(B),doFetchHeroCard:false,bingGeo:" +
+    "q=peopleSearchQuery&start=" + String(count) + "&count=100&query=(companySize:List(B),doFetchHeroCard:false,bingGeo:" +
     "(includedValues:List((id:" + geoId + "))),recentSearchParam:(doLogHistory:true),spotlightParam:(selectedType:ALL),titleV2:(scope:CURRENT,includedValues:List((text:Co-Founder,id:103))),tenureAtCurrentCompany:List(1),tenureAtCurrentPosition:List(1),trackingParam:(sessionId:IEPkPLzbSj6Vp2mTIIu7ww==),doFetchFilters:true,doFetchHits:true,doFetchSpotlights:true)&decorationId=com.linkedin.sales.deco.desktop.search.DecoratedPeopleSearchHitResult-10", {
     "headers": {
       "accept": "* /*",
@@ -91,16 +89,3 @@ export default async function co_founders_search(p_list, geoId, count) { // filt
     return await co_founders_search(p_list, geoId, count);
   }
 }
-
-//let profileList = [];
-// **** Execute profile scraper function ****
-//const totalProfiles = await co_founders_search (profileList,0);
-
-//'use strict';
-//let data = JSON.stringify(totalProfiles);
-//let filename = new Date().toISOString()
-
-//fs.writeFile(filename +".json", data, function(err) {
-//  if(err) console.log('Error saving profiles ', err);
-//  else console.log('Profiles successfully saved!');
-//);
