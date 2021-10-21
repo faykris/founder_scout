@@ -30,7 +30,6 @@ mongoose.connect(process.env.MONGODB_URI)
             { strict: false }
         );
 
-
         // Compile schema to model
         const Cof = mongoose.model('Co-Founders', FounderSchema, 'co-founders');
         for (let i = 0; binGeoList[i]; i++) {
@@ -40,7 +39,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
             profile_list = await co_founders_search(profile_list, binGeoList[i], 0)
                 .catch((err) => { return err });
-
+            //console.log(profile_list);
             if (profile_list.type === 'max-redirect') {
                 console.log("Max redirect reached - change profile header fetch info.");
                 break;
@@ -62,65 +61,66 @@ mongoose.connect(process.env.MONGODB_URI)
                         assert.ok(promise instanceof Promise);
                         await promise.then(async function (cof) {
                             if (cof === null) {
-                                console.log('---> Scraping company information of %s in %d seconds... ', profile_list[i].fullname, time);
+                                console.log('---> Scraping company information of %s in %d seconds... ', profile_list[j].fullname, time);
                                 await sleep(time * 1000);
-
                                 const companyInfo = await company_info(companyId).catch((err) => { return err });
-                                if (companyInfo.type === 'max-redirect') {
+                                if (companyInfo.type !== 'max-redirect') {
+                                    // filling in profile info
+                                    all_cof_info.profileInfo.vmid = vmid;
+                                    all_cof_info.profileInfo.profileUrl = profile_list[j].profileUrl;
+                                    all_cof_info.profileInfo.linkedInProfileUrl = profile_list[j].linkedInProfileUrl;
+                                    all_cof_info.profileInfo.firstName = profile_list[j].firstName;
+                                    all_cof_info.profileInfo.lastName = profile_list[j].lastName;
+                                    all_cof_info.profileInfo.fullName = profile_list[j].fullname;
+                                    all_cof_info.profileInfo.title = profile_list[j].title;
+                                    all_cof_info.profileInfo.location = profile_list[j].location;
+                                    all_cof_info.profileInfo.isPremium= profile_list[j].premium;
+                                    all_cof_info.profileInfo.profileImageUrl = profile_list[j].profileImageUrl;
+                                    // filling in company info
+                                    all_cof_info.companyInfo.companyId = profile_list[j].companyId;
+                                    all_cof_info.companyInfo.companyUrl= profile_list[j].companyUrl;
+                                    if (companyInfo.website !== undefined) {
+                                        all_cof_info.companyInfo.websiteUrl = companyInfo.website;
+                                    }
+                                    all_cof_info.companyInfo.companyName = profile_list[j].companyName;
+                                    all_cof_info.companyInfo.industry = profile_list[j].industry;
+                                    if (companyInfo.headquarters !== undefined) {
+                                        all_cof_info.companyInfo.location.country = companyInfo.headquarters.country;
+                                        all_cof_info.companyInfo.location.city = companyInfo.headquarters.city;
+                                    }
+                                    all_cof_info.companyInfo.createdAt.month = profile_list[j].month;
+                                    all_cof_info.companyInfo.createdAt.year = profile_list[j].year;
+                                    if (companyInfo.companyPictureDisplayImage !== undefined) {
+                                        all_cof_info.companyInfo.companyImageUrl = companyInfo.companyPictureDisplayImage.rootUrl +
+                                          companyInfo.companyPictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
+                                    }
+                                    all_cof_info.companyInfo.summary = profile_list[i].summary;
+                                    all_cof_info.companyInfo.timestamp = new Date().toISOString();
+
+                                    const co_founder = new Cof(all_cof_info);
+
+                                    const promise = co_founder.save();
+                                    assert.ok(promise instanceof Promise);
+
+                                    await promise.then(async function (doc) {
+                                        console.log(":D - %s from %s saved in the co-founders collection.", profile_list[j].fullname, profile_list[j].companyName);
+                                        success++;
+                                    });
+                                    await promise.catch(async (err) => console.log(err));
+                                }
+                                else {
                                     console.log("Max redirect reached - change company header fetch info");
                                     //break;
                                 }
-                                // filling in profile info
-                                all_cof_info.profileInfo['vmid'] = vmid;
-                                all_cof_info.profileInfo['profileUrl'] = profile_list[i].profileUrl;
-                                all_cof_info.profileInfo['linkedInProfileUrl'] = profile_list[i].linkedInProfileUrl;
-                                all_cof_info.profileInfo['firstName'] = profile_list[i].firstName;
-                                all_cof_info.profileInfo['lastName'] = profile_list[i].lastName;
-                                all_cof_info.profileInfo['fullName'] = profile_list[i].fullname;
-                                all_cof_info.profileInfo['title'] = profile_list[i].title;
-                                all_cof_info.profileInfo['location'] = profile_list[i].location;
-                                all_cof_info.profileInfo['isPremium'] = profile_list[i].premium;
-                                all_cof_info.profileInfo['profileImageUrl'] = profile_list[i].profileImageUrl;
-                                // filling in company info
-                                all_cof_info.companyInfo['companyId'] = profile_list[i].companyId;
-                                all_cof_info.companyInfo['companyUrl'] = profile_list[i].companyUrl;
-                                if (companyInfo !== {} && companyInfo.website !== undefined) {
-                                    all_cof_info.companyInfo['websiteUrl'] = companyInfo.website;
-                                }
-                                all_cof_info.companyInfo['companyName'] = profile_list[i].companyName;
-                                all_cof_info.companyInfo['industry'] = profile_list[i].industry;
-                                if (companyInfo !== {} && companyInfo.headquarters !== undefined) {
-                                    all_cof_info.companyInfo.location['country'] = companyInfo.headquarters.country;
-                                    all_cof_info.companyInfo.location['city'] = companyInfo.headquarters.city;
-                                }
-                                all_cof_info.companyInfo.createdAt['month'] = profile_list[i].month;
-                                all_cof_info.companyInfo.createdAt['year'] = profile_list[i].year;
-                                if (companyInfo !== {} && companyInfo.companyPictureDisplayImage !== undefined) {
-                                    all_cof_info.companyInfo['companyImageUrl'] = companyInfo.companyPictureDisplayImage.rootUrl +
-                                        companyInfo.companyPictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
-                                }
-                                all_cof_info.companyInfo['summary'] = profile_list[i].summary;
-                                all_cof_info.companyInfo['timestamp'] = new Date().toISOString();
-
-                                const co_founder = new Cof(all_cof_info);
-
-                                const promise = co_founder.save();
-                                assert.ok(promise instanceof Promise);
-
-                                await promise.then(async function (doc) {
-                                    console.log(":D - %s from %s saved in the co-founders collection.", profile_list[i].fullname, profile_list[i].companyName);
-                                    success++;
-                                });
-                                await promise.catch(async (err) => console.log(err));
                             }
                             else {
-                                console.log(":| - %s from %s already exists in the collection. Ignored.", profile_list[i].fullname, profile_list[i].companyName);
+                                console.log(":| - %s from %s already exists in the collection. Ignored.", profile_list[j].fullname, profile_list[j].companyName);
                                 ignored++;
                             }
                         });
                     }
                     else {
-                        console.log(":( - %s from %s doesn't have companyId. Ignored.", profile_list[i].fullname, profile_list[i].companyName);
+                        console.log(":( - %s from %s doesn't have companyId. Ignored.", profile_list[j].fullname, profile_list[j].companyName);
                         ignored++;
                     }
                 }
@@ -128,9 +128,10 @@ mongoose.connect(process.env.MONGODB_URI)
                     console.error("X( - failed processing company information %s from %s. Ignored.", profile_list[j].fullname, profile_list[j].companyName)
                     console.error(exe);
                 }
+              console.log("* Profiles processed: %d/%d saved: %d ignored: %d", j + 1, profile_list.length, success, ignored);
             }
         }
-        mongoose.disconnect().then(console.log("Connection Closed"));
+        mongoose.disconnect().then(() => console.log("Connection Closed"));
     })
     .catch((err) => console.log("Connection failed!\n", err))
 

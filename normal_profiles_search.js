@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 let profileList = []
 
-async function linkedInSearch() {
+export default async function co_founders_search() {
   const result = await fetch('https://www.linkedin.com/voyager/api/search/dash/clusters?decorationId=com.linkedin.voyager.dash.deco.search.SearchClusterCollection-120&origin=GLOBAL_SEARCH_HEADER&q=all&query=(keywords:Co-founder,flagshipSearchIntent:SEARCH_SRP,queryParameters:(geoUrn:List(100876405),resultType:List(PEOPLE),title:List(Co-founder)),includeFiltersInResponse:false)&start=40', {
     headers: {
       'authority': 'www.linkedin.com',
@@ -107,6 +107,3 @@ async function linkedInProfile(profileName) {
   }
 
 }
-
-console.log(await linkedInSearch());
-
