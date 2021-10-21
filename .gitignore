@@ -1,3 +1,10 @@
+# default jetbrains IDE folder
 .idea
+# node library root folder
+node_modules
+# avoid upload JSON files
 *.json
+# exception with package.json
 !package.json
+# enviroment variables
+.env
