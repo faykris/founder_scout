@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
+dotenv.config();
 // make a connection
-mongoose.connect('mongodb+srv://faykris:91crash91@cluster0.bxsvo.mongodb.net/founder_scout?retryWrites=true&w=majority');
+mongoose.connect(process.env.MONGODB_URI);
 
 // get reference to database?"
 const db = mongoose.connection;

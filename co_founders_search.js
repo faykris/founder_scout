@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import sleep from "./sleep.js";
+import sleep from "./functions/sleep.js";
 
 export default async function co_founders_search(p_list, geoId, count) { // filter by country: Colombia -> bingGeo:(includedValues:List((id:100876405))),
   const result = await fetch("https://www.linkedin.com/sales-api/salesApiPeopleSearch?" +
@@ -102,17 +102,3 @@ export default async function co_founders_search(p_list, geoId, count) { // filt
     return await co_founders_search(p_list, geoId, count);
   }
 }
-/*
-let profileList = [];
-// **** Execute profile scraper function ****
-const totalProfiles = await linkedInSearch(profileList,0);
-
-'use strict';
-let data = JSON.stringify(totalProfiles);
-let filename = new Date().toISOString()
-
-fs.writeFile(filename +".json", data, function(err) {
-  if(err) console.log('Error saving profiles ', err);
-  else console.log('Profiles successfully saved!');
-});
-*/

@@ -4,6 +4,8 @@
 node_modules
 # avoid upload JSON files
 *.json
+# avoid updload CSV files
+*.csv
 # exception with package.json
 !package.json
 # enviroment variables
