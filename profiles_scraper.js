@@ -1,3 +1,4 @@
+import Airtable from "airtable";
 import assert from "assert";
 import mongoose from 'mongoose';
 import co_founders_search from "./functions/co_founders_search.js";
@@ -16,6 +17,8 @@ if (process.argv.length < 3) {
 }
 
 dotenv.config();
+const base = new Airtable({apiKey: process.env.APY_KEY}).base(process.env.BASE_ID);
+
 // save binGeo Ids in a list
 for (let i = 2; process.argv[i]; i++) {
     binGeoList.push(process.argv[i]);
@@ -65,40 +68,54 @@ mongoose.connect(process.env.MONGODB_URI)
                                 await sleep(time * 1000);
                                 const companyInfo = await company_info(companyId).catch((err) => { return err });
                                 if (companyInfo.type !== 'max-redirect') {
+                                    const airtable_dict = {fields:{}};
+                                    const airtable_list = [];
                                     // filling in profile info
-                                    all_cof_info.profileInfo.vmid = vmid;
-                                    all_cof_info.profileInfo.profileUrl = profile_list[j].profileUrl;
-                                    all_cof_info.profileInfo.linkedInProfileUrl = profile_list[j].linkedInProfileUrl;
-                                    all_cof_info.profileInfo.firstName = profile_list[j].firstName;
-                                    all_cof_info.profileInfo.lastName = profile_list[j].lastName;
-                                    all_cof_info.profileInfo.fullName = profile_list[j].fullname;
-                                    all_cof_info.profileInfo.title = profile_list[j].title;
-                                    all_cof_info.profileInfo.location = profile_list[j].location;
-                                    all_cof_info.profileInfo.isPremium= profile_list[j].premium;
-                                    all_cof_info.profileInfo.profileImageUrl = profile_list[j].profileImageUrl;
+                                    airtable_dict.fields.vmid = all_cof_info.profileInfo.vmid = vmid;
+                                    airtable_dict.fields.profileUrl = all_cof_info.profileInfo.profileUrl = profile_list[j].profileUrl;
+                                    airtable_dict.fields.linkedInProfileUrl = all_cof_info.profileInfo.linkedInProfileUrl = profile_list[j].linkedInProfileUrl;
+                                    airtable_dict.fields.firstName = all_cof_info.profileInfo.firstName = profile_list[j].firstName.trim();
+                                    airtable_dict.fields.lastName = all_cof_info.profileInfo.lastName = profile_list[j].lastName.trim();
+                                    airtable_dict.fields.fullName = all_cof_info.profileInfo.fullName = profile_list[j].fullname.trim();
+                                    airtable_dict.fields.title = all_cof_info.profileInfo.title = profile_list[j].title.trim();
+                                    airtable_dict.fields.location = all_cof_info.profileInfo.location = profile_list[j].location.trim();
+                                    airtable_dict.fields.isPremium = all_cof_info.profileInfo.isPremium= profile_list[j].premium;
+                                    airtable_dict.fields.profileImageUrl = all_cof_info.profileInfo.profileImageUrl = profile_list[j].profileImageUrl;
                                     // filling in company info
-                                    all_cof_info.companyInfo.companyId = profile_list[j].companyId;
-                                    all_cof_info.companyInfo.companyUrl= profile_list[j].companyUrl;
+                                    airtable_dict.fields.companyId = all_cof_info.companyInfo.companyId = profile_list[j].companyId;
+                                    airtable_dict.fields.companyUrl = all_cof_info.companyInfo.companyUrl= profile_list[j].companyUrl;
                                     if (companyInfo.website !== undefined) {
-                                        all_cof_info.companyInfo.websiteUrl = companyInfo.website;
+                                        airtable_dict.fields.websiteUrl = all_cof_info.companyInfo.websiteUrl = companyInfo.website;
                                     }
-                                    all_cof_info.companyInfo.companyName = profile_list[j].companyName;
-                                    all_cof_info.companyInfo.industry = profile_list[j].industry;
+                                    airtable_dict.fields.companyName = all_cof_info.companyInfo.companyName = profile_list[j].companyName;
+                                    airtable_dict.fields.industry = all_cof_info.companyInfo.industry = profile_list[j].industry || companyInfo.industry;
                                     if (companyInfo.headquarters !== undefined) {
-                                        all_cof_info.companyInfo.location.country = companyInfo.headquarters.country;
-                                        all_cof_info.companyInfo.location.city = companyInfo.headquarters.city;
+                                        airtable_dict.fields.country = all_cof_info.companyInfo.location.country = companyInfo.headquarters.country.trim();
+                                        airtable_dict.fields.city = all_cof_info.companyInfo.location.city = companyInfo.headquarters.city.trim();
                                     }
-                                    all_cof_info.companyInfo.createdAt.month = profile_list[j].month;
-                                    all_cof_info.companyInfo.createdAt.year = profile_list[j].year;
+                                    airtable_dict.fields.month = all_cof_info.companyInfo.createdAt.month = profile_list[j].month;
+                                    airtable_dict.fields.year = all_cof_info.companyInfo.createdAt.year = profile_list[j].year;
                                     if (companyInfo.companyPictureDisplayImage !== undefined) {
-                                        all_cof_info.companyInfo.companyImageUrl = companyInfo.companyPictureDisplayImage.rootUrl +
+                                        airtable_dict.fields.companyImageUrl = all_cof_info.companyInfo.companyImageUrl = companyInfo.companyPictureDisplayImage.rootUrl +
                                           companyInfo.companyPictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
                                     }
                                     all_cof_info.companyInfo.summary = profile_list[i].summary;
-                                    all_cof_info.companyInfo.timestamp = new Date().toISOString();
+                                    airtable_dict.fields.timestamp = all_cof_info.companyInfo.timestamp = new Date().toISOString();
 
+                                    // Parse to Int company info for Airtable
+                                    airtable_dict.fields.companyId = parseInt(airtable_dict.fields.companyId);
+                                    // Parse to date with only YYYY-MM-DD for Airtable
+                                    airtable_dict.fields.timestamp = airtable_dict.fields.timestamp.substr(0,10);
+
+                                    // save profile in Airtable
+                                    airtable_list.push(airtable_dict);
+                                    await base('co-founders')
+                                      .create(airtable_list)
+                                      .then(async (record) => console.log(":D - %s from %s saved in Airtable.", profile_list[j].fullname, profile_list[j].companyName))
+                                      .catch(async (err) => console.log("X( - Error saving profile in Airtable:\n", err.message));
+
+                                    // save profile in MongoDB Atlas
                                     const co_founder = new Cof(all_cof_info);
-
                                     const promise = co_founder.save();
                                     assert.ok(promise instanceof Promise);
 
