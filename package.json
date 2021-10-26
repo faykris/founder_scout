@@ -17,7 +17,10 @@
     "flat": "^5.0.2",
     "mongoose": "^6.0.10",
     "mongoose-flat": "^0.0.2",
-    "node-fetch": "^3.0.0"
+    "node-crontab": "^0.0.8",
+    "node-fetch": "^3.0.0",
+    "nodemailer": "^6.7.0",
+    "pm2": "^5.1.2"
   },
   "type": "module",
   "devDependencies": {
