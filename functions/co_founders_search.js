@@ -4,34 +4,29 @@ import sleep from "./sleep.js";
 export default async function co_founders_search(p_list, geoId, count) { // filter by country: Colombia -> bingGeo:(includedValues:List((id:100876405))),
   const result = await fetch("https://www.linkedin.com/sales-api/salesApiPeopleSearch?" +
     "q=savedSearch&" +
-    "savedSearchId=50541275&" +
-    "newResultsOnly=true&" +
-    "start=" + String(count) + "&" +
-    "count=100&" +
-    "lastViewedAt=" + String(Date.now()).substr(0,10), {
+    "savedSearchId=50500115&" + "newResultsOnly=true&" + "start=" + String(count) +
+    "&count=100&" + "lastViewedAt=1635258814695", {
     "headers": {
       "accept": "*/*",
-      "accept-language": "es-ES,es;q=0.9",
-      "csrf-token": "ajax:3412942423165963119",
-      "sec-ch-ua": "\"Chromium\";v=\"94\", \"Google Chrome\";v=\"94\", \";Not A Brand\";v=\"99\"",
+      "accept-language": "en-US,en;q=0.9",
+      "csrf-token": "ajax:6514367558591851145",
+      "sec-ch-ua": "\"Chromium\";v=\"95\", \";Not A Brand\";v=\"99\"",
       "sec-ch-ua-mobile": "?0",
-      "sec-ch-ua-platform": "\"Windows\"",
+      "sec-ch-ua-platform": "\"Linux\"",
       "sec-fetch-dest": "empty",
       "sec-fetch-mode": "cors",
       "sec-fetch-site": "same-origin",
-      "x-li-identity": "dXJuOmxpOm1lbWJlcjo5Mzc3NDc3ODk",
+      "x-li-identity": "dXJuOmxpOm1lbWJlcjo5NDE5OTA5NTU",
       "x-li-lang": "en_US",
-      "x-li-page-instance": "urn:li:page:d_sales2_search_people_pivot_saved_delta;DUeYU55sRCyapwh3ofLLbw==",
+      "x-li-page-instance": "urn:li:page:d_sales2_search_people_pivot_saved_delta;W1IJGd5VR4GlLY+qHpW7zA==",
       "x-restli-protocol-version": "2.0.0",
-      "cookie": "li_sugr=248669f8-8a6c-4bfe-a600-5635dcdb011d; bcookie=\"v=2&61e76a31-c046-4d98-8c2c-8ee2f447df62\"; bscookie=\"v=1&20211006191210caa845ea-ad33-4bc8-8fc3-fb97e9f42056AQGf7FqLvk94GsVBhKyiNfSBpdHzOcOE\"; fcookie=AQGDRerWJbatZgAAAXyJerSofe5fdTVf2dbwSpfdfKkgBN_K-lRRo-cUMCKG47PM4aviCJC89rPSUA3cxdVmMw3VyUrICh6RHod2WENHc0hVJ6xc6ddy3ZDTzePmurOuO8Sn6zW82mtDy6H5pv6bNalNm-XOyrWxkbmUHflIlUOFJAf9J6hK3VVbwSv7y2i2G-99vsK6LyuZcnpCSug8j0eXD0LGr3A2MnseSMUpVV1YrDEco7Dl4E8ZGpU0a-mn-seLDAgxb8+78WAjtyX/5ptVxVAqArCVJY6rcQkAmPD2nwttDVZW5eqevyw1I+6Qo4OcYfQY+R3SDTGsRFXBAc/zDHlg==; li_at=AQEDATfk5U0AwT9rAAABfIl6tR0AAAF8rYc5HU0AQ-SzGCo_6E1piIH2HHTLdwP3DH2_Y9_JGTyKwyRx8zgWIrQ526uPWi8MQksBF0p99ejug3p2VNwU2u-pUBLGd7pbDELSA19HK5F9Z8gj-F-mWIHY; liap=true; JSESSIONID=\"ajax:3412942423165963119\"; timezone=America/Bogota; _guid=9eb18b37-19a5-42f0-a5ba-dadba388e031; aam_uuid=41029341209754532414172781260508165292; AMCV_14215E3D5995C57C0A495C55%40AdobeOrg=-637568504%7CMCIDTS%7C18920%7CMCMID%7C40531383935555829624118433342738401127%7CMCAAMLH-1635268010%7C4%7CMCAAMB-1635268010%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1634670410s%7CNONE%7CMCCIDH%7C1202759587%7CvVersion%7C5.1.1; AnalyticsSyncHistory=AQLWmDur7oHzLwAAAXyozaJy0cdhEsjZ64JDWeLnEa6vQUi6EgqG8L-n3FsabnLmzbFvrwv9mIQI7uH8ErYDRg; lms_ads=AQHNNwUeh46lsAAAAXyozaMlC4He5JJwKk7vrskLZhZJ_U4WaKfj67fWUmBbvGOm8jyJ-8WCO50hNNDnQrjlQTAsxZbexLfH; lms_analytics=AQHNNwUeh46lsAAAAXyozaMlC4He5JJwKk7vrskLZhZJ_U4WaKfj67fWUmBbvGOm8jyJ-8WCO50hNNDnQrjlQTAsxZbexLfH; fid=AQGAyoYGU453ZwAAAXyp75DDLTJtCUZSLpWj9ocr8tcy06ItiZXuj5l6a1Icw0FYFanx8ZqzOhIQvA; lang=v=2&lang=en-us; UserMatchHistory=AQJzViivZZWGvAAAAXyp75iBpMCjZhIKT19azTdlYd9E8NpNY0kvJglF-ZBnVDcZcHYPfdUe8qYfvWiNoau_TT81fupr6Bdg27KrUcys8dTOxcRrwKfjsJyxJH6P7LSIDi0ybnznXTDAvg9mmFisBbFHqU9AvVG5rtD2sH1Y1_ONrDO7Nkus4F4gMwzJVzNwzKk4UQA5xnGKOlGWAPvdYDG1MXff1sLEJIVRvb0f9fwYPeOhm_y-mjTnHQBWJAWgVDYzzYXWipe21nom98woxk7Tt5KFOfdGHj4ixFU; lidc=\"b=TB89:s=T:r=T:a=T:p=T:g=2670:u=7:x=1:i=1634938625:t=1635025022:v=2:sig=AQHG7f-axXZ3qMU3iaMDw0CJaxGXLaPB\"; li_a=AQJ2PTEmc2FsZXNfY2lkPTk2ODk1MjcwNyUzQSUzQTMxMTkwNzgwNwTuBj_cbTq3QpkUpmWQ_Xy_nKg2"
+      "cookie": "li_sugr=3f85b1fc-ea23-417b-babd-ded06ce09694; bcookie=\"v=2&acb0ab51-478e-4faa-819a-ac7c23fb853a\"; bscookie=\"v=1&20210905232313a1fb4eca-97f2-4e4f-8bd9-a5dcdbcaf247AQEDFCuzVoxD5ewuYiOiyDPCCsM8Vqzh\"; aam_uuid=70217657370447217862075267279885908151; timezone=America/Bogota; s_fid=7CD8F46604ABDD82-28F45EC741951DCB; _gcl_au=1.1.470399711.1633909461; li_rm=AQHpePiVPegsCgAAAXyEzr6fkLKqtOEuGveSPtl7anMDdoLsy43QoWdtHD6y8x1_uhOsiJ_tJLVeIgui5X1IYQHSI2UwKTV7C2aZgHmAikhgL0X9bDKskK_tSl409R3LIecBu5qMZAb4zMJItsp_3R-vB1t9J1vxbklsavB1vx1l0bEcb4pdP2nRCiXoX5jgwLFXmNlXfxZ2OBHlPPqXJoSnTwwrIUOdHODqlwbAe6BRyjCvlW_Fr9EPOR0xmoa7LqWHLTm3Kpm-PcvEEi5OFwF6WfxOOXHga6qMxtSnJ9pGVaS0P6MnU-uNy6vbWbnkMlxYiIqsZroW_7KKV3A; li_theme=system; __ssid=d8be94cc-fd36-4c18-9dcc-0034faada79f; _ga=GA1.2.2111367483.1634316095; dfpfpt=2d151106630c4b2095f4a03296ef8477; u_tz=GMT-05:00; VID=V_2021_10_15_17_753; mbox=PC#35c29004303940afbfdcb00e26b03a35.34_0#1649870273|session#1a6cd023273144c08d220dd101d1221e#1634318916; visit=v=1&M; li_er=v=1&r=urn:li:contract:369486696&t=1632786169397&g=MDIxrVzVg6/m7QqBk4f18mdxnaPwdTfEYUvVxDDTxExtBXs=; cap_session_id=3689516816:1; g_state={\"i_l\":0}; gpv_pn=www.linkedin.com%2Fpremium%2Fproducts%2F; s_tslv=1635183178679; li_at=AQEDATglpCsF8e0ZAAABfLmZuvMAAAF83aY-800AH9GMs0SZcT6dQRFH9W-hZSJn2zn6oCNs9HRPTJrBmiB2j3_PuaTaeSDfUc4SOVfqxopd4n2RKEp5Px00ZoJ1aWfcLkNr3H28ic-xJU1vEIF1NeZ9; liap=true; JSESSIONID=\"ajax:6514367558591851145\"; lang=v=2&lang=en-us; li_a=AQJ2PTEmc2FsZXNfY2lkPTk3NjE4MDgwNyUzQSUzQTMxNTk2MTYwN0EwDNVOFzAOiJHVhejKFExKJmYV; AMCVS_14215E3D5995C57C0A495C55%40AdobeOrg=1; lidc=\"b=TB55:s=T:r=T:a=T:p=T:g=3029:u=4:x=1:i=1635263624:t=1635350024:v=2:sig=AQEvXEnjCdAHPZD0rLbOW18AMrX_dHCp\"; UserMatchHistory=AQLAVQ19LAF15AAAAXy-bSEdDlilZ3Vdl3WwYRYP1EqUxfj9Oe6R2T_YHZ-mT0K8RzJpgwvrZR9csx8LeWMXPIRCV2OgyXFPbHqrOrASjYIymQbVpFebj1jlbSMsELXIQRDJneA3AGK0o54BUzEWNfs7-AjRpcc6HXliGBs7m3XYEtCj0VyDrN8ylv7T2kZSuqfCoFW3mo1lfN1BGAExPxTSrec0FdgdwO1rOvP7vZOq-5K224hcgbN4c6M3ZroJHDUX8tR8GEU_xwOKYzRMwpSFrUuOYp9_sRHL37Q; AMCV_14215E3D5995C57C0A495C55%40AdobeOrg=-637568504%7CMCIDTS%7C18926%7CMCMID%7C70429233835449844972018733740781849468%7CMCAAMLH-1635887196%7C4%7CMCAAMB-1635887196%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1635289596s%7CNONE%7CvVersion%7C5.1.1%7CMCCIDH%7C-616281000",
+      "Referer": "https://www.linkedin.com/sales/search/saved-searches/people",
+      "Referrer-Policy": "strict-origin-when-cross-origin"
     },
-    "referrer": "https://www.linkedin.com/sales/search/saved-searches/people",
-    "referrerPolicy": "strict-origin-when-cross-origin",
     "body": null,
-    "method": "GET",
-    "mode": "cors"
+    "method": "GET"
   });
-  console.log(String(Date.now()));
 
   const min = 5;
   const max = 30;
