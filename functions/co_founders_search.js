@@ -30,7 +30,7 @@ export default async function co_founders_search(p_list, geoId, count) { // filt
 
   const min = 5;
   const max = 30;
-  // salesApiPeopleSearch?q=peopleSearchQuery&start=0
+
   const cof_filter = await result.json();
   if (cof_filter.status > 399) {
     console.log("Error fetching data: status ", cof_filter.status)
@@ -77,7 +77,6 @@ export default async function co_founders_search(p_list, geoId, count) { // filt
     p_list.push(profileDict);
     count++;
   }
-
   console.log("Processed", count, "/", cof_filter.paging.total, "LinkedIn profiles");
   if (count >= cof_filter.paging.total) {
     return p_list;
