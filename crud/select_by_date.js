@@ -4,7 +4,7 @@ import assert from "assert";
 
 dotenv.config();
 // make a connection
-mongoose.connect(process.env.MONGODB_URI).then(function () {
+export default mongoose.connect(process.env.MONGODB_URI).then(function () {
   console.log("connection successfully");
 
   const FounderSchema = mongoose.Schema(
@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGODB_URI).then(function () {
 
   const promise = Cof.find({"companyInfo.timestamp": {
       "$gte": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1).toISOString(),
-      "$lt": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).toISOString()
+      "$lt": new Date().toISOString()
     }}).exec();
   assert.ok(promise instanceof Promise);
 
@@ -26,7 +26,8 @@ mongoose.connect(process.env.MONGODB_URI).then(function () {
     }
     else {
       console.log('Co-founders successfully selected!');
-      console.log(cof);
+      export default cof;
+      //console.log(cof);
     }
     mongoose.disconnect().then(() => console.log("Connection close"));
   }).catch((err) => console.log("select failed!\n", err));
