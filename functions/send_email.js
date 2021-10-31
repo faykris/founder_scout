@@ -16,7 +16,7 @@ export default mongoose.connect(process.env.MONGODB_URI).then(function () {
     const Cof = mongoose.model('Co-Founders', FounderSchema, 'co-founders');
 
     const promise = Cof.find({"companyInfo.timestamp": {
-            "$gte": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1).toISOString(),
+            "$gte": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1, new Date().getHours() + 9).toISOString(),
             "$lt": new Date().toISOString()
         }}).exec();
     assert.ok(promise instanceof Promise);
@@ -81,12 +81,12 @@ export default mongoose.connect(process.env.MONGODB_URI).then(function () {
                 // send mail with defined transport object
                 let info = await transporter.sendMail({
                     from: '"Founder Scout" <2617@holbertonschool.com>', // sender address
-                    to: "2617@holbertonschool.com", // list of receivers
+                    to: "2617@holbertonschool.com, 2160@holbertonschool.com, andres.barreto@techstars.com", // list of receivers
                     subject: "Founder Scout - new LinkedIn profiles were added", // Subject line
                     text: "There are the new co-founder profiles from LinkedIn", // plain text body
                     html: `<h1 style="background-color: #000000; color: #ffffff; text-align: center; padding: 0.3rem;">${cof.length} profiles were added from yesterday</h1>
                            <p style="text-align: center; font-family: Verdana, sans-serif;">
-                              To view the list of existing profiles, visit our Airtable spreadsheet. If you don't have access, please contact the administrator.
+                              To view the list of existing profiles visit our Airtable spreadsheet. If you don't have access, please contact the administrator.
                            </p>
                            <p style="text-align: center; font-family: Verdana, sans-serif;">
                               <a style="border-radius: 0.3rem; padding: 0.6rem 2rem; font-size: 1rem; text-decoration: none; color: #ffffff; background-color: #000000;" href="${airtableUrl}">Airtable Base</a>
