@@ -5,7 +5,7 @@ import co_founders_search from "./functions/co_founders_search.js";
 import company_info from "./functions/company_info.js";
 import sleep from "./functions/sleep.js";
 import dotenv from 'dotenv';
-import {transporter} from "./functions/mail";
+import {transporter} from "./functions/mail.js";
 
 const binGeoList = [];
 const max = 30;
@@ -43,7 +43,6 @@ mongoose.connect(process.env.MONGODB_URI)
 
       profile_list = await co_founders_search(profile_list, binGeoList[i], 0)
         .catch((err) => { return err });
-      //console.log(profile_list);
       if (profile_list.type === 'max-redirect') {
         console.log("Max redirect reached - change profile header fetch info.");
         let info = await transporter.sendMail({
@@ -58,7 +57,7 @@ mongoose.connect(process.env.MONGODB_URI)
                 `, // html body
         });
         console.log(info);
-        break;
+        process.exit(1);
       }
       else if (profile_list.type !== undefined) {
         console.log("Error fetching data: %s", profile_list.type);
@@ -70,8 +69,8 @@ mongoose.connect(process.env.MONGODB_URI)
           const companyId = profile_list[j].companyId;
           const vmid = profile_list[j].vmid;
           let all_cof_info = { "profileInfo": {}, "companyInfo": { location: {}, createdAt: {} } };
-
           const time = (Math.random() * (max - min) + min).toFixed();
+
           if (companyId !== undefined) {
             const promise = Cof.findOne({ "profileInfo.vmid": vmid }).exec();
             assert.ok(promise instanceof Promise);
@@ -90,8 +89,8 @@ mongoose.connect(process.env.MONGODB_URI)
                   airtable_dict.fields.firstName = all_cof_info.profileInfo.firstName = profile_list[j].firstName.trim();
                   airtable_dict.fields.lastName = all_cof_info.profileInfo.lastName = profile_list[j].lastName.trim();
                   airtable_dict.fields.fullName = all_cof_info.profileInfo.fullName = profile_list[j].fullname.trim();
-                  airtable_dict.fields.title = all_cof_info.profileInfo.title = profile_list[j].title.trim();
-                  airtable_dict.fields.location = all_cof_info.profileInfo.location = profile_list[j].location.trim();
+                  airtable_dict.fields.title = all_cof_info.profileInfo.title = profile_list[j].title;
+                  airtable_dict.fields.location = all_cof_info.profileInfo.location = profile_list[j].location;
                   airtable_dict.fields.isPremium = all_cof_info.profileInfo.isPremium= profile_list[j].premium;
                   airtable_dict.fields.profileImageUrl = all_cof_info.profileInfo.profileImageUrl = profile_list[j].profileImageUrl;
                   // filling in company info
@@ -103,8 +102,8 @@ mongoose.connect(process.env.MONGODB_URI)
                   airtable_dict.fields.companyName = all_cof_info.companyInfo.companyName = profile_list[j].companyName;
                   airtable_dict.fields.industry = all_cof_info.companyInfo.industry = profile_list[j].industry || companyInfo.industry;
                   if (companyInfo.headquarters !== undefined) {
-                    airtable_dict.fields.country = all_cof_info.companyInfo.location.country = companyInfo.headquarters.country.trim();
-                    airtable_dict.fields.city = all_cof_info.companyInfo.location.city = companyInfo.headquarters.city.trim();
+                    airtable_dict.fields.country = all_cof_info.companyInfo.location.country = companyInfo.headquarters.country;
+                    airtable_dict.fields.city = all_cof_info.companyInfo.location.city = companyInfo.headquarters.city;
                   }
                   airtable_dict.fields.month = all_cof_info.companyInfo.createdAt.month = profile_list[j].month;
                   airtable_dict.fields.year = all_cof_info.companyInfo.createdAt.year = profile_list[j].year;
@@ -152,6 +151,7 @@ mongoose.connect(process.env.MONGODB_URI)
                           `, // html body
                   });
                   console.log(info);
+                  process.exit(1);
                 }
               }
               else {
