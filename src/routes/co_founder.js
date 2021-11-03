@@ -13,21 +13,14 @@ router.post('/co-founders', (req, res) => {
     .catch((error) => res.json({message: error}));
 });
 
-// get all co-founders - not allowed
-/*
-router.get('/co_founders', (req, res) => {
-  cofSchema
-    .find()
-    .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}));
-});
-*/
-
 // get only one specific co-founder by vmid
 router.get('/co-founders/vmid/:vmid', cors(), (req, res) => {
   cofSchema
     .findOne({"profileInfo.vmid" : { $eq: req.params.vmid }})
-    .then((data) => res.json(data))
+    .then(function (data) {
+      res.header("Content-Type",'application/json');
+      res.send(JSON.stringify(data, null, 4));
+    })
     .catch((error) => res.json({message: error}));
 });
 
@@ -36,7 +29,10 @@ router.get('/co-founders/country/:country', cors(), (req, res) => {
   console.log(req.params.location || undefined);
   cofSchema
     .find({"companyInfo.location.country": { $regex: new RegExp(req.params.country), $options: "i" }})
-    .then((data) => res.json(data))
+    .then(function (data) {
+      res.header("Content-Type",'application/json');
+      res.send(JSON.stringify(data, null, 4));
+    })
     .catch((error) => res.json({message: error}));
 });
 
@@ -59,7 +55,10 @@ router.get('/co-founders/country/:country/:year/:month', cors(), (req, res) => {
          {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}},
          {"companyInfo.createdAt.month": {$eq: parseInt(req.params.month)}}
          ]})
-    .then((data) => res.json(data))
+    .then(function (data) {
+      res.header("Content-Type",'application/json');
+      res.send(JSON.stringify(data, null, 4));
+    })
     .catch((error) => res.json({message: error}));
 });
 
@@ -68,7 +67,10 @@ router.get('/co-founders/city/:city', cors(), (req, res) => {
   console.log(req.params.location || undefined);
   cofSchema
     .find({"companyInfo.location.city": { $regex: new RegExp("^" + req.params.city + "$", "i")} })
-    .then((data) => res.json(data))
+    .then(function (data) {
+      res.header("Content-Type",'application/json');
+      res.send(JSON.stringify(data, null, 4));
+    })
     .catch((error) => res.json({message: error}));
 });
 
@@ -79,7 +81,10 @@ router.get('/co-founders/city/:city/:year', cors(), (req, res) => {
     .find({$and: [{"companyInfo.location.city": { $regex: new RegExp("^" + req.params.city + "$", "i")}},
         {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}}
       ]})
-    .then((data) => res.json(data))
+    .then(function (data) {
+      res.header("Content-Type",'application/json');
+      res.send(JSON.stringify(data, null, 4));
+    })
     .catch((error) => res.json({message: error}));
 });
 
@@ -91,7 +96,10 @@ router.get('/co-founders/city/:city/:year/:month', cors(), (req, res) => {
         {"companyInfo.createdAt.year": {$eq: parseInt(req.params.year)}},
         {"companyInfo.createdAt.month": {$eq: parseInt(req.params.month)}}
       ]})
-    .then((data) => res.json(data))
+    .then(function (data) {
+      res.header("Content-Type",'application/json');
+      res.send(JSON.stringify(data, null, 4));
+    })
     .catch((error) => res.json({message: error}));
 });
 
