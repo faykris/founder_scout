@@ -111,7 +111,7 @@ mongoose.connect(process.env.MONGODB_URI)
                     airtable_dict.fields.companyImageUrl = all_cof_info.companyInfo.companyImageUrl = companyInfo.companyPictureDisplayImage.rootUrl +
                       companyInfo.companyPictureDisplayImage.artifacts[0].fileIdentifyingUrlPathSegment;
                   }
-                  all_cof_info.companyInfo.summary = profile_list[i].summary;
+                  airtable_dict.fields.description = all_cof_info.companyInfo.summary = companyInfo.description;
                   airtable_dict.fields.timestamp = all_cof_info.companyInfo.timestamp = new Date().toISOString();
 
                   // Parse to Int company info for Airtable
