@@ -20,12 +20,12 @@ await base('co-founders').select({
 }).eachPage(async function page(records, fetchNextPage) {
   let i = 0;
   for (const record of records) {
-    if (record.get('description') === undefined) {
+    if (record.get('description') === undefined && pag > 24) {
       const time = (Math.random() * (max - min) + min).toFixed();
-      console.log('Update %s in %d seconds', record.get('fullName'), time);
+      console.log('Update %s from %s in %d seconds', record.get('fullName'),  record.get('companyName'), time);
       await sleep(time * 1000);
 
-      const company = await company_info(String(record.get('companyId')));
+      const company = await company_info(String(record.get('companyId'))).catch((err) => console.error(err));
 
       if (company.type === 'max-redirect') {
         console.log("Max redirect reached - change company header fetch info");
@@ -82,9 +82,9 @@ await base('co-founders').select({
     }
     i++;
     console.log("Processed", i, "/", records.length, "total:", i + total_processed, "page:", pag);
-    total_processed += 1;
+    total_processed++;
   }
-  pag += 1;
+  pag++;
   fetchNextPage();
 }, function done(err) {
   if (err) { console.error(err); }
