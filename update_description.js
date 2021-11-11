@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import sleep from "./functions/sleep.js";
 import company_info from "./functions/company_info.js";
 import {transporter} from "./functions/mail.js";
+import assert from "assert";
 
 dotenv.config();
 const max = 30;
@@ -20,7 +21,7 @@ await base('co-founders').select({
 }).eachPage(async function page(records, fetchNextPage) {
   let i = 0;
   for (const record of records) {
-    if (record.get('description') === undefined && pag > 24) {
+    if (record.get('description') === undefined && pag > 39) {
       const time = (Math.random() * (max - min) + min).toFixed();
       console.log('Update %s from %s in %d seconds', record.get('fullName'),  record.get('companyName'), time);
       await sleep(time * 1000);
@@ -44,7 +45,8 @@ await base('co-founders').select({
         process.exit(1);
       }
       else if (company.description !== undefined) {
-        await base('co-founders').update([
+
+        const promise = base('co-founders').update([
           {
             "id": record.getId(),
             "fields": {
@@ -71,13 +73,13 @@ await base('co-founders').select({
               "description": company.description
             }
           }
-        ], function (err, profile) {
-          if (err) {
-            console.error("Error update %s:\n/s", record.get("fullName"), err);
-            return;
-          }
+        ]);
+        assert.ok(promise instanceof Promise);
+
+        await promise.then(async function (doc) {
           console.log(record.get("fullName"), "updated...");
         });
+        await promise.catch(async (err) => console.log(err));
       }
     }
     i++;
