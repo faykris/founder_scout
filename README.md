@@ -1,5 +1,5 @@
 ![# Founder Scout](images/fs2.png)
-## LinkedIn Web Scraper
+## LinkedIn Profiles Scraper
 Founder Scout is a LinkedIn scraper that retrieves information about co-founders into web search filter.
 This project is based in scrape requests using Nodejs with fetch functions, the information
 will arrive to Mongodb Atlas and Airtable base at the same time. Then it can be consulted in both parts, in the case
@@ -219,6 +219,8 @@ we need to execute the following command:
 ## Authors 📝
 * [Angui Clavijo](https://github.com/angie-clavijo-desarrollo)
 * [Cristian Pinzón](https://github.com/faykris)
-![](images/title fs.png)
+
+#
+![](https://lh3.googleusercontent.com/proxy/iGuJ2frLFFN4_qiJtppQKhF6p5FHCiV7xujrg-0KWBRBEZS-Fc0bItcvJc4ZbkCMHuxr3FAEqHC0AjRNohWE4y_6)
 
 © Designed by The Code Troopers team (Holberton Cohort 14), all rights reserved.
