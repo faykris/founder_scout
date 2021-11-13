@@ -1,5 +1,4 @@
-![](images/fs2.png)
-# Founder Scout
+![# Founder Scout](images/fs2.png)
 Founder Scout is a LinkedIn scraper that retrieves information about co-founders into web search filter.
 This project is based in scrape requests using Nodejs with fetch functions, the information
 will arrive to Mongodb Atlas and Airtable base at the same time. Then it can be consulted in both parts, in the case
@@ -15,7 +14,7 @@ of the Airtable base they will be saved as records in a table.
 To implement this, we are needs only make a pull to a project's GitHub repository, also create a .env files and fill them
 with their environment variables and import the Node modules.
 
-### Pre requirements 📋
+### Requirements 📋
 * Install Nodejs version 14 or higher
 * Have a premium LinkedIn account with Sales Navigator tool
 * Have a Mongodb Atlas user to access co-founders collection
@@ -43,8 +42,10 @@ variables (use your preferred code editor, this is an example):
 MONGODB_URI=mongodb+srv://user:password@cluster0.bxsvo.mongodb.net/founder_scout?retryWrites=true&w=majority
 APY_KEY=aaaaaaaaaaaaaaaaa
 BASE_ID=bbbbbbbbbbbbbbbbb
-EMAIL_USER=guess@founderscout.com
+EMAIL_USER=user@founderscout.com
 EMAIL_PASS=ccccccccccccccc
+EMAIL_DEST=email1@founderscout.com, email2@founderscout.com
+EMAIL_SUPP=support@founderscout.com
 ```
 
 * MONGODB_URI: a corresponding uri connect to Mongodb Atlas
@@ -52,6 +53,8 @@ EMAIL_PASS=ccccccccccccccc
 * BASE_ID: Identifier of the Airtable Base that we are needs to manage
 * EMAIL_USER: email that will be used with Nodemailer
 * EMAIL_PASS: password created from email security settings (for the Nodemailer usage)
+* EMAIL_DEST: list of receivers of email with the newest profiles
+* EMAIL_SUPP: email that supporter person about this project execution
 
 Now, we need to install node packages defined in package.json file, using the following command:
 ```bash
@@ -160,9 +163,11 @@ Replace the fetch copied from company webpage in functions/company_info.js chang
 by company variable.
 
 ```node
-fetch("https://www.linkedin.com/sales-api/salesApiCompanies/" + companyId +"?" + 
+// ...
+await fetch("https://www.linkedin.com/sales-api/salesApiCompanies/" + companyId +"?" + 
         "decoration=%28entityUrn%2" // ...
-// ... 
+// ...
+)
 
 ```
 
@@ -213,3 +218,6 @@ we need to execute the following command:
 ## Authors 📝
 * [Angui Clavijo](https://github.com/angie-clavijo-desarrollo)
 * [Cristian Pinzón](https://github.com/faykris)
+![](images/title fs.png)
+
+© Designed by The Code Troopers team (Holberton Cohort 14), all rights reserved.
