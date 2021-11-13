@@ -54,7 +54,7 @@ mongoose.connect(process.env.MONGODB_URI)
         process.exit(1);
       }
       else if (peopleList.status > 399) {
-        console.log("Error fetching people data: status ", peopleList.status)
+        console.log("Error fetching people data: status", peopleList.status)
         process.exit(1);
       }
 
@@ -86,7 +86,7 @@ mongoose.connect(process.env.MONGODB_URI)
                   console.log("Max redirect reached - change company header fetch info");
                   process.exit(1);
                 } else if (company.status > 399) {
-                  console.log("Error fetching company data: status ", peopleList.status)
+                  console.log("Error fetching company data: status", company.status)
                   process.exit(1);
                 }
 

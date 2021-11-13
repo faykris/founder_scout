@@ -21,7 +21,7 @@ await base('co-founders').select({
 }).eachPage(async function page(records, fetchNextPage) {
   let i = 0;
   for (const record of records) {
-    if (record.get('description') === undefined && pag > 39) {
+    if (record.get('description') === undefined && pag > 44) {
       const time = (Math.random() * (max - min) + min).toFixed();
       console.log('Update %s from %s in %d seconds', record.get('fullName'),  record.get('companyName'), time);
       await sleep(time * 1000);

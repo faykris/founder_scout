@@ -16,11 +16,6 @@ Content-Type: application/json
     "profileImageUrl": "https://media-exp1.licdn.com/dms/image/C5603AQGeuq2oWkYOQg/profile-displayphoto-shrink_100_100/0/1602429114383?e=1639008000&v=beta&t=mN52I9GTPLyzCeal34LFITB-oimYpboYlRdyDr3InQ0"
   },
   "companyInfo": {
-    "companyName": "Wildmund Ventures GmbH",
-    "companyId": "69973820",
-    "companyUrl": "https://www.linkedin.com/company/69973820/",
-    "websiteUrl": "https://wilmund.com",
-    "industry": "Consumer Goods",
     "location": {
       "country": "Germany",
       "city": "Hamburg"
@@ -29,6 +24,11 @@ Content-Type: application/json
       "month": 11,
       "year": 2020
     },
+    "companyName": "Wildmund Ventures GmbH",
+    "companyId": "69973820",
+    "companyUrl": "https://www.linkedin.com/company/69973820/",
+    "websiteUrl": "https://wilmund.com",
+    "industry": "Consumer Goods",
     "summary": "Ich bin E-Commerce Enthusiast, Freelancer und Gründer von Wildmund Ventures. Was mich und meine Arbeit auszeichnet, ist der absolute Wunsch anderen zu helfen erfolgreicher im Onlinehandel zu werden. \n\nDabei nehmen Geschwindigkeit, Transparenz und Ehrlichkeit die zentrale Rolle in meiner Unternehmung ein. Durch meine praxisnahe Ausbildung in den Bereichen Medienmanagement & E-Commerce sowie einschlägiger Erfahrung als Händler & Berater steht meine Firma wilde.digital führ eine unabhängige Beratung im E-Commerce – ohne jeglichen Selbstzweck!",
     "timestamp": "2021-10-04T12:44:02.441Z"
   }
